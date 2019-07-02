@@ -4,13 +4,16 @@ QUESTION_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title
 ANSWER_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
 
 
-def read_csv_data(filename):
+def read_csv_data(filename, filter=None):
     requested_data = []
 
     with open(filename, encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
 
         for row in reader:
+            if filter:
+                if row['question_id'] == filter:
+                    return row
             data = dict(row)
             requested_data.append(data)
 
