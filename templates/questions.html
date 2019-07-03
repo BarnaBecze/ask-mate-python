@@ -31,7 +31,7 @@
             </tbody>
         </table>
     <h1>Answers</h1>
-    {% if answer %}
+    {% if answers %}
         <table>
             <thead>
                 <tr>
@@ -42,6 +42,7 @@
                     <th>Image</th>
                 </tr>
             </thead>
+            {%
             <tbody>
                 <tr>
                     <td>{{ answer['submission_time'] }}</td>

@@ -10,8 +10,18 @@ def display_question(question_id):
     questions = read_csv_data('sample_data/question.csv')
     for question in questions:
         if question['id'] == question_id:
-            answer = dict(read_csv_data('sample_data/answer.csv', question['id']))
-            return question, answer
+            return question
+
+
+def display_answers(question_id):
+    answers = []
+    every_answer = read_csv_data('sample_data/answer.csv')
+    for answer in every_answer:
+        if answer['question_id'] == question_id:
+            answers.append(answer)
+    return answers
+
 
 def ask_question():
     pass
+

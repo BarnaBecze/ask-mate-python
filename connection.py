@@ -12,7 +12,7 @@ def read_csv_data(filename, filter=None):
 
         for row in reader:
             if filter:
-                if row['question_id'] == filter:
+                if row['id'] == filter:
                     return row
             data = dict(row)
             requested_data.append(data)
