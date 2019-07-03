@@ -1,20 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>List Questions</title>
-        <style>
-            td,th {
-                border: 1px solid #177199;
-                padding: 0.1em 1em;
-            }
-        </style>
+{% extends 'layout.html' %}
+
+{% block title %}
+    Welcome!
+{% endblock %}
+
+{% block content %}
     </head>
     <body>
+    <h1>Question</h1>
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Posted</th>
                     <th>Views</th>
                     <th>Votes</th>
@@ -25,14 +21,40 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>0</td>
-                    <td>2000.01.01</td>
-                    <td>300</td>
-                    <td>39</td>
-                    <td>How to make lists in Python?</td>
-                    <td>I am totally new to this, any hints?</td>
+                    <td>{{ question['submission_time'] }}</td>
+                    <td>{{ question['view_number'] }}</td>
+                    <td>{{ question['vote_number'] }}</td>
+                    <td>{{ question['title'] }}</td>
+                    <td>{{ question['message'] }}</td>
+                    <td>{{ question['image'] }}</td>
                 </tr>
             </tbody>
         </table>
+    <h1>Answers</h1>
+    {% if answer %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Posted</th>
+                    <th>Votes</th>
+                    <th>Question ID</th>
+                    <th>Message</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ answer['submission_time'] }}</td>
+                    <td>{{ answer['vote_number'] }}</td>
+                    <td>{{ answer['question_id'] }}</td>
+                    <td>{{ answer['message'] }}</td>
+                    <td>{{ answer['image'] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {% elif not answer %}
+    <p>No answers yet!</p>
+    {% endif %}
+    <a href="{{ url_for('route_post_answer', question_id=question['id']) }}">Post Answer</a>
     </body>
-</html>
+{% endblock %}
