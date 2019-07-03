@@ -42,7 +42,7 @@
                     <th>Image</th>
                 </tr>
             </thead>
-            {%
+            {% for answer in answers %}
             <tbody>
                 <tr>
                     <td>{{ answer['submission_time'] }}</td>
@@ -52,6 +52,7 @@
                     <td>{{ answer['image'] }}</td>
                 </tr>
             </tbody>
+            {% endfor %}
         </table>
     {% elif not answer %}
     <p>No answers yet!</p>
