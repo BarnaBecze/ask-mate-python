@@ -6,10 +6,10 @@ def list_questions():
     return sorted(questions, key=lambda q: q['submission_time'], reverse=True)
 
 
-def display_question(question_title):
+def display_question(question_id):
     questions = read_csv_data('sample_data/question.csv')
     for question in questions:
-        if question['title'] == question_title:
+        if question['id'] == question_id:
             answer = dict(read_csv_data('sample_data/answer.csv', question['id']))
             return question, answer
 
