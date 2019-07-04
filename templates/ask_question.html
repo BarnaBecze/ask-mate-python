@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Ask Question
+{% endblock %}
+
+{% block content %}
+    <form action="{{ url_for('route_ask_question') }}" method="post">
+        <label for="title">Your question:</label><br>
+        <textarea name="title" id="tile" cols="50" rows="5" required>{{ new_question['title']|safe }}</textarea>
+        <p>
+            <label for="message">Detail your question:</label><br>
+            <textarea name="message" id="message" cols="50" rows="20" required>{{ new_question['message']|safe }}</textarea>
+        </p>
+        <p>
+            <button type="submit">Post your question</button>
+        </p>
+    </form>
+{% endblock %}

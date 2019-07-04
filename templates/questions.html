@@ -5,8 +5,6 @@
 {% endblock %}
 
 {% block content %}
-    </head>
-    <body>
     <h1>Question</h1>
         <table>
             <thead>
@@ -58,5 +56,5 @@
     <p>No answers yet!</p>
     {% endif %}
     <a href="{{ url_for('route_post_answer', question_id=question['id']) }}">Post Answer</a>
-    </body>
+
 {% endblock %}
