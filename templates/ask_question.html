@@ -5,15 +5,25 @@
 {% endblock %}
 
 {% block content %}
+    <style>
+        label{
+            font-size: 20px;
+        }
+        textarea{
+            border: 2px solid black;
+            background-color: #e6eabe;
+            font-size: 20px;
+        }
+    </style>
     <form action="{{ url_for('route_ask_question') }}" method="post">
         <label for="title">Your question:</label><br>
-        <textarea name="title" id="title" cols="50" rows="5" required>{{ new_question['title']|safe }}</textarea>
+        <textarea name="title" id="titl" cols="50" rows="5" required>{{ new_question['title']|safe }}</textarea>
         <p>
             <label for="message">Detail your question:</label><br>
             <textarea name="message" id="message" cols="50" rows="20" required>{{ new_question['message']|safe }}</textarea>
         </p>
         <p>
-            <button type="submit">Post your question</button>
+            <button type="submit" style="width: 100px; height: 50px;color: #9C1A1C; font-size: 20px">Post your question</button>
         </p>
     </form>
 {% endblock %}

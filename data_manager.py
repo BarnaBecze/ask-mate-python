@@ -1,9 +1,22 @@
 from connection import read_csv_data, write_csv_data
+from datetime import datetime
+import time
+
+
+def convert_timestamp_to_datetime(data, type=dict):
+    if type == list:
+        for d in data:
+            d['submission_time'] = datetime.fromtimestamp(int(d['submission_time']))
+        return data
+    data['submission_time'] = datetime.fromtimestamp(int(data['submission_time']))
+    return data
 
 
 def list_questions():
     questions = read_csv_data('sample_data/question.csv')
-    return sorted(questions, key=lambda q: q['submission_time'], reverse=True)
+    ordered_questions = sorted(questions, key=lambda q: q['submission_time'], reverse=True)
+
+    return ordered_questions
 
 
 def display_question(question_id):
@@ -19,10 +32,20 @@ def display_answers(question_id):
     for answer in every_answer:
         if answer['question_id'] == question_id:
             answers.append(answer)
-    return answers
+    return sorted(answers, key=lambda a: a['vote_number'])
 
 
-def ask_question():
-    pass
+def get_next_id(filename):
+    existing_data = read_csv_data(filename)
+
+    if len(existing_data) == 0:
+        return '1'
+
+    return str(int(existing_data[-1]['id']) + 1)
+
+
+def get_current_time():
+    current_time = int(time.time())
+    return current_time
 
 
