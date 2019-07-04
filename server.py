@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from data_manager import list_questions, display_question, display_answers, get_next_id
+from data_manager import list_questions, display_question, display_answers, get_next_id, convert_timestamp_to_datetime
 import connection
 
 app = Flask(__name__)
@@ -16,7 +16,7 @@ def index():
 def route_questions(question_id):
     question = display_question(question_id)
     answers = display_answers(question_id)
-    return render_template('questions.html', question=question, answers=answers)
+    return render_template('questions.html', question=convert_timestamp_to_datetime(question), answers=convert_timestamp_to_datetime(answers, list))
 
 
 @app.route('/ask_question', methods=['GET', 'POST'])
