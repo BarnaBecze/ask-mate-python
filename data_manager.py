@@ -22,7 +22,12 @@ def display_answers(question_id):
     return answers
 
 
-def ask_question():
-    pass
+def get_next_id(filename):
+    existing_data = read_csv_data(filename)
+
+    if len(existing_data) == 0:
+        return '1'
+
+    return str(int(existing_data[-1]['id']) + 1)
 
 

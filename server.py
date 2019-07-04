@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from data_manager import list_questions, display_question, display_answers
+from data_manager import list_questions, display_question, display_answers, get_next_id
 import connection
 
 app = Flask(__name__)
@@ -24,7 +24,7 @@ def route_ask_question():
     new_question = {}
     if request.method == 'POST':
         new_question = {
-            'id': 100,
+            'id': get_next_id('sample_data/question.csv'),
             'submission_time': 100,
             'view_number': 100,
             'vote_number': 100,
