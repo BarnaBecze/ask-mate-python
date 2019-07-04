@@ -20,7 +20,7 @@ def read_csv_data(filename, filter=None):
     return requested_data
 
 
-def write_csv_data(data, filename, header, append=False, remove=False):
+def write_csv_data(data, filename, header, append=True, remove=False):
     existing_data = read_csv_data(filename)
 
     with open(filename, 'w', newline='', encoding='utf-8') as csvfile:

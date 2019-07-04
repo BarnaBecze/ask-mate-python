@@ -5,8 +5,6 @@
 {% endblock %}
 
 {% block content %}
-    </head>
-    <body>
         <table>
             <thead>
                 <tr>
@@ -25,5 +23,7 @@
             {% endfor %}
             </tbody>
         </table>
-    </body>
+        <form action="{{ url_for('route_ask_question') }}" method="get">
+            <button type="submit">Ask Question</button>
+        </form>
 {% endblock %}
