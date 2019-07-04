@@ -5,8 +5,16 @@
 {% endblock %}
 
 {% block content %}
+
     <h1>Question</h1>
-        <table>
+        <style>
+            table, th, td {
+          border: 2px solid black;
+                background-color: #e6eabe;
+                font-size: 20px;
+        }
+        </style>
+        <table style="width:100%">
             <thead>
                 <tr>
                     <th>Posted</th>
@@ -17,7 +25,7 @@
                     <th>Image</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody align="center">
                 <tr>
                     <td>{{ question['submission_time'] }}</td>
                     <td>{{ question['view_number'] }}</td>
