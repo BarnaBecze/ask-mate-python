@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from data_manager import list_questions, display_question, display_answers, get_next_id, convert_timestamp_to_datetime
+from data_manager import list_questions, display_question, display_answers, get_next_id, convert_timestamp_to_datetime, get_current_time
 import connection
 
 app = Flask(__name__)
@@ -16,7 +16,7 @@ def index():
 def route_questions(question_id):
     question = display_question(question_id)
     answers = display_answers(question_id)
-    return render_template('questions.html', question=convert_timestamp_to_datetime(question), answers=convert_timestamp_to_datetime(answers, list))
+    return render_template('questions.html', question=convert_timestamp_to_datetime(question), answers=answers)
 
 
 @app.route('/ask_question', methods=['GET', 'POST'])
@@ -25,7 +25,7 @@ def route_ask_question():
     if request.method == 'POST':
         new_question = {
             'id': get_next_id('sample_data/question.csv'),
-            'submission_time': 100,
+            'submission_time': get_current_time(),
             'view_number': 100,
             'vote_number': 100,
             'title': request.form.get('title'),

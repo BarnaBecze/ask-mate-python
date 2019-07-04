@@ -1,5 +1,6 @@
 from connection import read_csv_data, write_csv_data
 from datetime import datetime
+import time
 
 
 def convert_timestamp_to_datetime(data, type=dict):
@@ -41,5 +42,10 @@ def get_next_id(filename):
         return '1'
 
     return str(int(existing_data[-1]['id']) + 1)
+
+
+def get_current_time():
+    current_time = int(time.time())
+    return current_time
 
 

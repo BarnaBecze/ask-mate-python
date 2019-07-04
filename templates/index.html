@@ -5,7 +5,14 @@
 {% endblock %}
 
 {% block content %}
-        <table>
+        <style>
+            table, th, td {
+          border: 2px solid black;
+                background-color: #e6eabe;
+                font-size: 20px;
+        }
+        </style>
+        <table style="width: 100%;">
             <thead>
                 <tr>
                     <th>Views</th>
@@ -24,6 +31,6 @@
             </tbody>
         </table>
         <form action="{{ url_for('route_ask_question') }}" method="get">
-            <button type="submit">Ask Question</button>
+            <button type="submit" style="width: 100px; height: 50px;color: #9C1A1C; font-size: 20px">Ask Question</button>
         </form>
 {% endblock %}
