@@ -3,7 +3,11 @@ from datetime import datetime
 import time
 
 
-def convert_timestamp_to_datetime(data):
+def convert_timestamp_to_datetime(data, type=dict):
+    if type == list:
+        for d in data:
+            d['submission_time'] = datetime.fromtimestamp(int(d['submission_time']))
+        return data
     data['submission_time'] = datetime.fromtimestamp(int(data['submission_time']))
     return data
 
