@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 from data_manager import  list_questions, display_question, display_answers
 
 
@@ -21,7 +21,7 @@ def route_questions(question_id):
 
 @app.route('/question/<question_id>/new-answer')
 def route_post_answer(question_id):
-    pass
+    return redirect ('/')
 
 
 if __name__ == '__main__':
