@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from data_manager import list_questions, display_question, display_answers
 import connection
 
@@ -34,13 +34,25 @@ def route_ask_question():
 
         }
         connection.write_csv_data(new_question, 'sample_data/question.csv', connection.QUESTION_HEADER)
-        return redirect('/')
+        return redirect(url_for('route_questions', question_id=new_question['id']))
     return render_template('ask_question.html', new_question=new_question)
 
 
-@app.route('/question/<question_id>/new-answer')
+@app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
 def route_post_answer(question_id):
-    pass
+    answer = {}
+    if request.method == 'POST':
+        answer = {
+            'id': 100,
+            'submission_time': 100,
+            'vote_number': 0,
+            'question_id': question_id,
+            'message': request.form.get('message'),
+            'image': 100
+        }
+        connection.write_csv_data(answer, 'sample_data/answer.csv', connection.ANSWER_HEADER)
+        return redirect(url_for('route_questions', question_id=question_id))
+    return render_template('answers.html', answer=answer, id=question_id)
 
 
 if __name__ == '__main__':
