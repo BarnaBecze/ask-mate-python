@@ -1,9 +1,17 @@
 from connection import read_csv_data, write_csv_data
+from datetime import datetime
+
+
+def convert_timestamp_to_datetime(data):
+    data['submission_time'] = datetime.fromtimestamp(int(data['submission_time']))
+    return data
 
 
 def list_questions():
     questions = read_csv_data('sample_data/question.csv')
-    return sorted(questions, key=lambda q: q['submission_time'], reverse=True)
+    ordered_questions = sorted(questions, key=lambda q: q['submission_time'], reverse=True)
+
+    return ordered_questions
 
 
 def display_question(question_id):
@@ -19,7 +27,7 @@ def display_answers(question_id):
     for answer in every_answer:
         if answer['question_id'] == question_id:
             answers.append(answer)
-    return answers
+    return sorted(answers, key=lambda a: a['vote_number'])
 
 
 def ask_question():
