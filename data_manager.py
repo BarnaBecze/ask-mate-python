@@ -2,7 +2,11 @@ from connection import read_csv_data, write_csv_data
 from datetime import datetime
 
 
-def convert_timestamp_to_datetime(data):
+def convert_timestamp_to_datetime(data, type=dict):
+    if type == list:
+        for d in data:
+            d['submission_time'] = datetime.fromtimestamp(int(d['submission_time']))
+        return data
     data['submission_time'] = datetime.fromtimestamp(int(data['submission_time']))
     return data
 
