@@ -26,6 +26,13 @@ def display_question(question_id):
             return question
 
 
+def get_answer_id(answer_id):
+    answers = read_csv_data('sample_data/answer.csv')
+    for answer in answers:
+        if answer['id'] == answer_id:
+            return answer
+
+
 def display_answers(question_id):
     answers = []
     every_answer = read_csv_data('sample_data/answer.csv')

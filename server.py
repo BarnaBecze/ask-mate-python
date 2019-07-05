@@ -5,8 +5,8 @@ import connection
 app = Flask(__name__)
 
 
-@app.route('/')
-@app.route('/list')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/list', methods=['GET', 'POST'])
 def index():
     questions = list_questions()
     return render_template('index.html', questions=questions)
@@ -30,7 +30,7 @@ def route_ask_question():
             'vote_number': 100,
             'title': request.form.get('title'),
             'message': request.form.get('message'),
-            'image': 100
+            'image': None
 
         }
         connection.write_csv_data(new_question, 'sample_data/question.csv', connection.QUESTION_HEADER)
@@ -38,17 +38,31 @@ def route_ask_question():
     return render_template('ask_question.html', new_question=new_question)
 
 
+@app.route('/question/<question_id>/delete', methods=['GET', 'POST'])
+def route_delete_question(question_id):
+    connection.write_csv_data(question_id, 'sample_data/question.csv', connection.QUESTION_HEADER, append=False, remove=True)
+    return redirect('/')
+
+
+# @app.route('/question/<answer_id>/delete', methods=['GET', 'POST'])
+# def route_delete_answer(answer_id):
+#     print(answer_id)
+#     connection.write_csv_data(answer_id, 'sample_data/answer.csv', connection.ANSWER_HEADER, append=False, remove=True)
+#     print(answer_id)
+#     return redirect(url_for('route_questions'))
+
+
 @app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
 def route_post_answer(question_id):
     answer = {}
     if request.method == 'POST':
         answer = {
-            'id': 100,
-            'submission_time': 100,
+            'id': get_next_id('sample_data/answer.csv'),
+            'submission_time': get_current_time(),
             'vote_number': 0,
             'question_id': question_id,
             'message': request.form.get('message'),
-            'image': 100
+            'image': None
         }
         connection.write_csv_data(answer, 'sample_data/answer.csv', connection.ANSWER_HEADER)
         return redirect(url_for('route_questions', question_id=question_id))

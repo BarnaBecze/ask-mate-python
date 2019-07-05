@@ -5,11 +5,27 @@
 {% endblock %}
 
 { {% block content %}
+    <style>
+        label{
+            font-size: 20px;
+        }
+        textarea{
+            border: 2px solid black;
+            background-color: #e6eabe;
+            font-size: 20px;
+        }
+    </style>
     <form action="{{ url_for('route_post_answer', question_id=id) }}" method="post">
         <label for="message">Detail your answer:</label><br>
-        <textarea name="message" id="message" cols="50" rows="30" required>{{ answer['message']|safe }}</textarea>
+        <textarea name="message" id="message" cols="50" rows="28" required>{{ answer['message']|safe }}</textarea>
         <p>
-            <button type="submit">Post your answer</button>
+            <button formnovalidate formaction="{{ url_for('index') }}" type="submit" style="width: 100px; height: 50px;
+                    color: #9C1A1C; font-size: 20px">Home</button>
+            <button type="reset" style="width: 100px; height: 50px;
+                    color: #9C1A1C; font-size: 20px">Reset</button>
+            <button type="submit" style="width: 100px; height: 50px;
+                    color: #9C1A1C; font-size: 20px">Post</button>
+
         </p>
     </form>
 {% endblock %}

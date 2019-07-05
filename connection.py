@@ -31,7 +31,7 @@ def write_csv_data(data, filename, header, append=True, remove=False):
             if not append and not remove:
                 if row['id'] == data['id']:
                     row = data
-            if not remove or row['id'] != data['id']:
+            if not remove or row['id'] != data:
                 writer.writerow(row)
 
         if append:

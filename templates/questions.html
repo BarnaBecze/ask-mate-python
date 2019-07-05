@@ -36,6 +36,12 @@
                 </tr>
             </tbody>
         </table>
+    <form action="{{ url_for('route_delete_question', question_id=question['id']) }}">
+{#        <button formnovalidate type="submit" style="width: 100px; height: 50px;color: #9C1A1C;#}
+{#                font-size: 20px">Home</button>#}
+        <button type="submit" style="width: 100px; height: 50px;color: #9C1A1C;
+                font-size: 20px">Delete</button>
+    </form>
     <h1>Answers</h1>
     {% if answers %}
         <table>
@@ -56,6 +62,11 @@
                     <td>{{ answer['question_id'] }}</td>
                     <td>{{ answer['message'] }}</td>
                     <td>{{ answer['image'] }}</td>
+{#                    <td><form action="{{ url_for('route_delete_answer', answer_id=answer['id']) }}" >#}
+{#                        <button type="submit" style="width: 100px; height: 50px;color: #9C1A1C;#}
+{#                font-size: 20px">Delete answer</button>#}
+{#                    </form>#}
+                    </td>
                 </tr>
             </tbody>
             {% endfor %}
@@ -63,6 +74,8 @@
     {% elif not answer %}
     <p>No answers yet!</p>
     {% endif %}
-    <a href="{{ url_for('route_post_answer', question_id=question['id']) }}">Post Answer</a>
-
+    <form action="{{ url_for('route_post_answer', question_id=question['id'])}}">
+    <button type="submit" style="width: 100px; height: 50px;color: #9C1A1C;
+                font-size: 20px">Post answer</button>
+    </form>
 {% endblock %}
