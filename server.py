@@ -6,6 +6,11 @@ app = Flask(__name__)
 
 
 @app.route('/', methods=['GET', 'POST'])
+def list_latest_questions():
+    latest_questions = data_manager.list_questions(latest=True)
+    return render_template('index.html', latest=True, questions=latest_questions)
+
+
 @app.route('/list', methods=['GET', 'POST'])
 def index():
     sort = request.args.get('sort')

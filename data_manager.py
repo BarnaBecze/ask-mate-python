@@ -2,19 +2,22 @@ from connection import connection_handler
 from psycopg2 import sql
 
 @connection_handler
-def list_questions(cursor, sort=None, direction=None):
+def list_questions(cursor, sort=None, direction=None, latest=None):
     if sort:
         cursor.execute(f'''
                         SELECT * FROM question
-                        ORDER BY {sort} {direction}''')
+                        ORDER BY {sort} {direction};''')
     else:
-        cursor.execute('''
-                        SELECT * FROM question
-                        ORDER BY submission_time;
-                        ''')
+        query = ('''
+                 SELECT * FROM question
+                 ORDER BY submission_time DESC
+                 ''')
+        if latest:
+            query += 'LIMIT 5;'
+        cursor.execute(query)
     questions = cursor.fetchall()
-    print()
     return questions
+
 
 @connection_handler
 def display_question(cursor, question_id):
