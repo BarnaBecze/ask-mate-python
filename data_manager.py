@@ -67,9 +67,18 @@ def insert_into_database(cursor, table, data):
 def delete_from_database(cursor, id, question=False):
 
     if question:
-        query_question = f'DELETE FROM question WHERE id={id}'
-        cursor.execute(query_question)
+        query_tag = '''DELETE FROM tag WHERE id = (SELECT tag_id FROM question_tag WHERE question_id = id)'''
+        cursor.execute(query_tag)
+        query_question_tag = f'DELETE FROM question_tag WHERE question_id={id}'
+        cursor.execute(query_question_tag)
+        query_comment_question = f'DELETE FROM comment WHERE question_id={id} OR answer_id = (SELECT id FROM answer WHERE question_id={id})'
+        cursor.execute(query_comment_question)
         query_answers = f'DELETE FROM answer WHERE question_id={id}'
         cursor.execute(query_answers)
-    query = f'DELETE FROM answer WHERE id={id}'
-    cursor.execute(query)
+        query_question = f'DELETE FROM question WHERE id={id}'
+        cursor.execute(query_question)
+
+    query_comment = f'DELETE FROM comment WHERE answer_id={id}'
+    cursor.execute(query_comment)
+    query_answer = f'DELETE FROM answer WHERE id={id}'
+    cursor.execute(query_answer)
