@@ -1,22 +1,24 @@
-from flask import Flask, render_template, request, redirect
-from data_manager import list_questions, display_question, display_answers, get_next_id, convert_timestamp_to_datetime, get_current_time
-import connection
+from flask import Flask, render_template, request, redirect, url_for
+import data_manager
+from datetime import datetime
 
 app = Flask(__name__)
 
 
-@app.route('/')
-@app.route('/list')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/list', methods=['GET', 'POST'])
 def index():
-    questions = list_questions()
+    sort = request.args.get('sort')
+    direction = request.args.get('direction')
+    questions = data_manager.list_questions(sort, direction)
     return render_template('index.html', questions=questions)
 
 
 @app.route('/question/<question_id>')
 def route_questions(question_id):
-    question = display_question(question_id)
-    answers = display_answers(question_id)
-    return render_template('questions.html', question=convert_timestamp_to_datetime(question), answers=answers)
+    question = data_manager.display_question(question_id)
+    answers = data_manager.display_answers(question_id)
+    return render_template('questions.html', question=question, answers=answers)
 
 
 @app.route('/ask_question', methods=['GET', 'POST'])
@@ -24,23 +26,47 @@ def route_ask_question():
     new_question = {}
     if request.method == 'POST':
         new_question = {
-            'id': get_next_id('sample_data/question.csv'),
-            'submission_time': get_current_time(),
-            'view_number': 100,
-            'vote_number': 100,
+            'id': data_manager.get_next_id('question'),
+            'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            'view_number': '100',
+            'vote_number': '100',
             'title': request.form.get('title'),
             'message': request.form.get('message'),
-            'image': 100
+            'image': None
 
         }
-        connection.write_csv_data(new_question, 'sample_data/question.csv', connection.QUESTION_HEADER)
-        return redirect('/')
+        data_manager.insert_into_database('question', new_question)
+        return redirect(url_for('route_questions', question_id=new_question['id']))
     return render_template('ask_question.html', new_question=new_question)
 
 
-@app.route('/question/<question_id>/new-answer')
+@app.route('/question/<question_id>/delete', methods=['GET', 'POST'])
+def route_delete_question(question_id):
+    data_manager.delete_from_database(question_id, question=True)
+    return redirect('/')
+
+
+@app.route('/question/<question_id>/<answer_id>/delete', methods=['GET', 'POST'])
+def route_delete_answer(question_id, answer_id):
+    data_manager.delete_from_database(answer_id)
+    return redirect(url_for('route_questions', question_id=question_id))
+
+
+@app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
 def route_post_answer(question_id):
-    pass
+    answer = {}
+    if request.method == 'POST':
+        answer = {
+            'id': data_manager.get_next_id('answer'),
+            'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            'vote_number': 0,
+            'question_id': question_id,
+            'message': request.form.get('message'),
+            'image': None
+        }
+        data_manager.insert_into_database('answer', answer)
+        return redirect(url_for('route_questions', question_id=question_id))
+    return render_template('answers.html', answer=answer, id=question_id)
 
 
 if __name__ == '__main__':

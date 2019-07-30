@@ -1,38 +1,44 @@
-import csv
-
-QUESTION_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
-ANSWER_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
-
-
-def read_csv_data(filename, filter=None):
-    requested_data = []
-
-    with open(filename, encoding='utf-8') as csvfile:
-        reader = csv.DictReader(csvfile)
-
-        for row in reader:
-            if filter:
-                if row['id'] == filter:
-                    return row
-            data = dict(row)
-            requested_data.append(data)
-
-    return requested_data
+import psycopg2
+import psycopg2.extras
+import os
 
 
-def write_csv_data(data, filename, header, append=True, remove=False):
-    existing_data = read_csv_data(filename)
+def get_connection_string():
+    user_name = os.environ.get('PSQL_USER_NAME')
+    password = os.environ.get('PSQL_PASSWORD')
+    host = os.environ.get('PSQL_HOST')
+    database_name = os.environ.get('PSQL_DB_NAME')
 
-    with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=header)
-        writer.writeheader()
+    env_variables_defined = user_name and password and host and database_name
 
-        for row in existing_data:
-            if not append and not remove:
-                if row['id'] == data['id']:
-                    row = data
-            if not remove or row['id'] != data['id']:
-                writer.writerow(row)
+    if env_variables_defined:
+        return 'postgresql://{user_name}:{password}@{host}/{database_name}'.format(
+            user_name=user_name,
+            password=password,
+            host=host,
+            database_name=database_name
+        )
+    else:
+        raise KeyError('Some necessary environment variable(s) are not defined')
 
-        if append:
-            writer.writerow(data)
+
+def open_database():
+    try:
+        connection_string = get_connection_string()
+        connection = psycopg2.connect(connection_string)
+        connection.autocommit = True
+    except psycopg2.DatabaseError as exception:
+        print('Database connection problem')
+        raise exception
+    return connection
+
+
+def connection_handler(function):
+    def wrapper(*args, **kwargs):
+        connection = open_database()
+        dict_cur = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        ret_value = function(dict_cur, *args, **kwargs)
+        dict_cur.close()
+        connection.close()
+        return ret_value
+    return wrapper

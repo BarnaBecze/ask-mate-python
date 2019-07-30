@@ -6,36 +6,32 @@
 
 {% block content %}
 
-    <h1>Question</h1>
-        <style>
-            table, th, td {
-          border: 2px solid black;
-                background-color: #e6eabe;
-                font-size: 20px;
-        }
-        </style>
-        <table style="width:100%">
+    <h1>{{ question['title'] }}</h1>
+        <table id="question_table">
             <thead>
                 <tr>
                     <th>Posted</th>
                     <th>Views</th>
                     <th>Votes</th>
-                    <th>Title</th>
                     <th>Message</th>
-                    <th>Image</th>
                 </tr>
             </thead>
-            <tbody align="center">
+            <tbody>
                 <tr>
                     <td>{{ question['submission_time'] }}</td>
                     <td>{{ question['view_number'] }}</td>
                     <td>{{ question['vote_number'] }}</td>
-                    <td>{{ question['title'] }}</td>
-                    <td>{{ question['message'] }}</td>
-                    <td>{{ question['image'] }}</td>
+                    <td>{{ question['message'] }}
+                    {% if question['image'] %}
+                        <img src="{{ question['image'] }}" alt="img">
+                    {% endif %}
+                    </td>
                 </tr>
             </tbody>
         </table>
+    <form action="{{ url_for('route_delete_question', question_id=question['id']) }}">
+        <button type="submit">Delete</button>
+    </form>
     <h1>Answers</h1>
     {% if answers %}
         <table>
@@ -43,9 +39,7 @@
                 <tr>
                     <th>Posted</th>
                     <th>Votes</th>
-                    <th>Question ID</th>
                     <th>Message</th>
-                    <th>Image</th>
                 </tr>
             </thead>
             {% for answer in answers %}
@@ -53,9 +47,12 @@
                 <tr>
                     <td>{{ answer['submission_time'] }}</td>
                     <td>{{ answer['vote_number'] }}</td>
-                    <td>{{ answer['question_id'] }}</td>
-                    <td>{{ answer['message'] }}</td>
-                    <td>{{ answer['image'] }}</td>
+                    <td>{{ answer['message'], answer['image'] }}</td>
+                    <td><form action="{{ url_for('route_delete_answer', answer_id=answer['id'],
+                     question_id=answer['question_id']) }}" >
+                        <button id="delete" type="submit">Delete answer</button>
+                    </form>
+                    </td>
                 </tr>
             </tbody>
             {% endfor %}
@@ -63,6 +60,8 @@
     {% elif not answer %}
     <p>No answers yet!</p>
     {% endif %}
-    <a href="{{ url_for('route_post_answer', question_id=question['id']) }}">Post Answer</a>
-
+    <form action="{{ url_for('route_post_answer', question_id=question['id'])}}">
+        <button class="button2" formnovalidate formaction="{{ url_for('index') }}" type="submit">Home</button>
+        <button type="submit">Post answer</button>
+    </form>
 {% endblock %}

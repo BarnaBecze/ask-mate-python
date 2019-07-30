@@ -1,51 +1,72 @@
-from connection import read_csv_data, write_csv_data
-from datetime import datetime
-import time
+from connection import connection_handler
+from psycopg2 import sql
+
+@connection_handler
+def list_questions(cursor, sort=None, direction=None):
+    if sort:
+        cursor.execute(f'''
+                        SELECT * FROM question
+                        ORDER BY {sort} {direction}''')
+    else:
+        cursor.execute('''
+                        SELECT * FROM question
+                        ORDER BY submission_time;
+                        ''')
+    questions = cursor.fetchall()
+    print()
+    return questions
+
+@connection_handler
+def display_question(cursor, question_id):
+    cursor.execute('''
+                    SELECT * FROM question
+                    WHERE id='%s';
+                    ''' % int(question_id))
+    question = cursor.fetchall()
+
+    return question[0]
 
 
-def convert_timestamp_to_datetime(data, type=dict):
-    if type == list:
-        for d in data:
-            d['submission_time'] = datetime.fromtimestamp(int(d['submission_time']))
-        return data
-    data['submission_time'] = datetime.fromtimestamp(int(data['submission_time']))
-    return data
+@connection_handler
+def display_answers(cursor, question_id=None):
+    if question_id:
+        cursor.execute('''
+                        SELECT * FROM answer
+                        WHERE question_id='%s';
+                        ''' % question_id)
+        answers = cursor.fetchall()
+        return sorted(answers, key=lambda a: a['vote_number'])
+    else:
+        cursor.execute('SELECT * FROM answer')
+        answers = cursor.fetchall()
+        return answers
 
 
-def list_questions():
-    questions = read_csv_data('sample_data/question.csv')
-    ordered_questions = sorted(questions, key=lambda q: q['submission_time'], reverse=True)
-
-    return ordered_questions
-
-
-def display_question(question_id):
-    questions = read_csv_data('sample_data/question.csv')
-    for question in questions:
-        if question['id'] == question_id:
-            return question
-
-
-def display_answers(question_id):
-    answers = []
-    every_answer = read_csv_data('sample_data/answer.csv')
-    for answer in every_answer:
-        if answer['question_id'] == question_id:
-            answers.append(answer)
-    return sorted(answers, key=lambda a: a['vote_number'])
-
-
-def get_next_id(filename):
-    existing_data = read_csv_data(filename)
-
+def get_next_id(type):
+    if type == 'question':
+        existing_data = list_questions()
+    elif type == 'answer':
+        existing_data = display_answers()
     if len(existing_data) == 0:
         return '1'
 
-    return str(int(existing_data[-1]['id']) + 1)
+    return max([e['id'] for e in existing_data]) + 1
 
 
-def get_current_time():
-    current_time = int(time.time())
-    return current_time
 
+@connection_handler
+def insert_into_database(cursor, table, data):
+    query = sql.SQL('INSERT INTO {} '
+                    'VALUES ({});').format(sql.Identifier(table), sql.SQL(', ').join(map(sql.Placeholder, data)))
+    cursor.execute(query, data)
 
+@connection_handler
+def delete_from_database(cursor, id, question=False):
+
+    if question:
+        query_question = f'DELETE FROM question WHERE id={id}'
+        cursor.execute(query_question)
+        query_answers = f'DELETE FROM answer WHERE question_id={id}'
+        cursor.execute(query_answers)
+    query = f'DELETE FROM answer WHERE id={id}'
+    cursor.execute(query)

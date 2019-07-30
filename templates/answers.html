@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'layout.html' %}
 
-</body>
-</html>
+{% block title %}
+    Post Answer
+{% endblock %}
+
+{ {% block content %}
+    <form action="{{ url_for('route_post_answer', question_id=id) }}" method="post">
+        <label for="message">Detail your answer:</label><br>
+        <textarea name="message" id="message" cols="50" rows="28" required>{{ answer['message']|safe }}</textarea>
+        <p>
+            <button formnovalidate formaction="{{ url_for('index') }}" type="submit">Home</button>
+            <button type="reset">Reset</button>
+            <button type="submit">Post</button>
+        </p>
+    </form>
+{% endblock %}

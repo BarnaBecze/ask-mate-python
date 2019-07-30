@@ -1,36 +1,46 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-    Welcome!
+    AskMate 2.0
 {% endblock %}
 
 {% block content %}
-        <style>
-            table, th, td {
-          border: 2px solid black;
-                background-color: #e6eabe;
-                font-size: 20px;
-        }
-        </style>
-        <table style="width: 100%;">
-            <thead>
-                <tr>
-                    <th>Views</th>
-                    <th>Votes</th>
-                    <th>Title</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for question in questions %}
-                <tr>
-                    <td>{{ question['view_number'] }}</td>
-                    <td>{{ question['vote_number'] }}</td>
-                    <td><a href="{{ url_for('route_questions', question_id=question['id']) }}">{{ question['title'] }}</a></td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <form action="{{ url_for('route_ask_question') }}" method="get">
-            <button type="submit" style="width: 100px; height: 50px;color: #9C1A1C; font-size: 20px">Ask Question</button>
-        </form>
+    <h1 id="askmate">AskMate 2.0</h1>
+    <div id="sorting_questions">
+    <form id="sorting" action="{{ url_for('index') }}" name="sort_by" method="get">
+        <label for="sort">Sort by:</label>
+        <select id="sort" name="sort">
+          <option value="submission_time">Date</option>
+          <option value="vote_number">Votes</option>
+          <option value="view_number">Number of views</option>
+        </select>
+        <label id="direction_label" for="direction">Order:</label>
+        <select name="direction" id="direction">
+            <option value="ASC">Ascending</option>
+            <option value="DESC">Descending</option>
+        </select>
+        <button type="submit">Sort</button>
+    </form>
+    </div>
+    <table id="indexTable">
+        <thead>
+            <tr>
+                <th>Views</th>
+                <th>Votes</th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for question in questions %}
+            <tr>
+                <td>{{ question['view_number'] }}</td>
+                <td>{{ question['vote_number'] }}</td>
+                <td><a href="{{ url_for('route_questions', question_id=question['id']) }}">{{ question['title'] }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div id="button1_container">
+        <p><a id="button1" href="{{ url_for('route_ask_question') }}">Ask Question</a></p>
+    </div>
 {% endblock %}
