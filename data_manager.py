@@ -71,7 +71,7 @@ def delete_from_database(cursor, id, question=False):
         cursor.execute(query_tag)
         query_question_tag = f'DELETE FROM question_tag WHERE question_id={id}'
         cursor.execute(query_question_tag)
-        query_comment_question = f'DELETE FROM comment WHERE question_id={id} OR answer_id = (SELECT id FROM answer WHERE question_id={id})'
+        query_comment_question = f'DELETE FROM comment WHERE question_id={id} OR answer_id IN (SELECT id FROM answer WHERE question_id={id})'
         cursor.execute(query_comment_question)
         query_answers = f'DELETE FROM answer WHERE question_id={id}'
         cursor.execute(query_answers)
