@@ -77,6 +77,7 @@ def route_delete_answer(question_id, answer_id):
 @app.route('/question/<question_id>/vote-up', methods=['GET', 'POST'])
 def route_vote_up(question_id):
     increment = 1
+    print("up")
     if request.method == 'POST':
         answer_id = request.args.get('answer_id')
         data_manager.update_question_vote('answer', increment, id=answer_id)
@@ -88,6 +89,7 @@ def route_vote_up(question_id):
 @app.route('/question/<question_id>/vote-down', methods=['GET', 'POST'])
 def route_vote_down(question_id):
     increment = -1
+    print("down")
     if request.method == 'POST':
         answer_id = request.args.get('answer_id')
         data_manager.update_question_vote('answer', increment, id=answer_id)

@@ -44,6 +44,7 @@ def display_answers(cursor, question_id=None):
         answers = cursor.fetchall()
         return answers
 
+
 @connection_handler
 def get_next_id(cursor, item_type):
     cursor.execute(f'SELECT MAX(id) AS max_id FROM {item_type};')
@@ -51,6 +52,7 @@ def get_next_id(cursor, item_type):
     if max_id == 0:
         return 1
     return max_id['max_id'] + 1
+
 
 @connection_handler
 def update_question_vote(cursor, table, increment, id=None):

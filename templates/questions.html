@@ -54,7 +54,6 @@
             {% for answer in answers %}
             <tbody>
                 <tr>
-                    <td>{{ answer['id'] }}</td>
                     <td>{{ answer['submission_time'] }}</td>
                     <td><form action="{{ url_for('route_vote_up', question_id=question['id'], answer_id=answer['id']) }}" name="answer_id" method="post">
                             <button type="submit">Up</button>
