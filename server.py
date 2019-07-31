@@ -62,6 +62,23 @@ def route_post_answer(question_id):
     return render_template('answers.html', answer=answer, id=question_id)
 
 
+@app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
+def route_add_comment(question_id):
+    comment = {}
+    if request.method == 'POST':
+        comment = {
+            'id': data_manager.get_next_id('comment'),
+            'question_id': question_id,
+            'answer_id': None,
+            'message': request.form.get('message'),
+            'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            'edited_count': 0
+        }
+        data_manager.insert_into_database('comment', comment)
+        return redirect(url_for('route_questions', question_id=question_id))
+    return render_template('comment.html', comment=comment, id=question_id)
+
+
 @app.route('/question/<question_id>/delete', methods=['GET', 'POST'])
 def route_delete_question(question_id):
     data_manager.delete_from_database(question_id, question=True)
