@@ -86,6 +86,12 @@ def route_vote_down(question_id):
     return redirect(url_for('route_questions', question_id=question_id))
 
 
+@app.route('/search')
+def search_questions_answers():
+    search_phrase = request.args.get('search_phrase')
+    print(search_phrase)
+
+
 if __name__ == '__main__':
     app.run(
         port=5000,

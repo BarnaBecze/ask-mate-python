@@ -89,3 +89,16 @@ def delete_from_database(cursor, id, question=False):
     cursor.execute(query_comment)
     query_answer = f'DELETE FROM answer WHERE id={id}'
     cursor.execute(query_answer)
+
+
+@connection_handler
+def search_in_db(cursor, search_phrase):
+    cursor.execute(f"""
+                    SELECT * FROM answer
+                    WHERE message LIKE '%{search_phrase}%'""")
+    answers = cursor.fetchall()
+    cursor.execute(f"""
+                    SELECT * FROM question
+                    WHERE (title OR message) LIKE '%{search_phrase}%'""")
+    questions = cursor.fetchall()
+    return answers, questions
