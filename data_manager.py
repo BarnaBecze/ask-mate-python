@@ -46,6 +46,16 @@ def display_answers(cursor, question_id=None):
 
 
 @connection_handler
+def display_comments(cursor, question_id):
+    cursor.execute('''
+                    SELECT * FROM comment
+                    WHERE question_id='%s';
+                    ''' % question_id)
+    comments = cursor.fetchall()
+    return comments
+
+
+@connection_handler
 def get_next_id(cursor, item_type):
     cursor.execute(f'SELECT MAX(id) AS max_id FROM {item_type};')
     max_id = cursor.fetchone()

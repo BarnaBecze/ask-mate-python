@@ -23,7 +23,8 @@ def index():
 def route_questions(question_id):
     question = data_manager.display_question(question_id)
     answers = data_manager.display_answers(question_id)
-    return render_template('questions.html', question=question, answers=answers)
+    comments = data_manager.display_comments(question_id)
+    return render_template('questions.html', question=question, answers=answers, comments=comments)
 
 
 @app.route('/ask_question', methods=['GET', 'POST'])

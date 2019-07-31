@@ -38,11 +38,31 @@
                 </tr>
                 <tr>
                     <td>
-                        <p>siia tuleb kommentaar</p>
+
                     </td>
                 </tr>
             </tbody>
         </table>
+        {% if comments %}
+        <table id="question_table">
+            <thead>
+                <tr>
+                    <th>Posted</th>
+                    <th>Message</th>
+                    <th>Edited</th>
+                </tr>
+            </thead>
+            {% for comment in comments %}
+            <tbody>
+                <tr>
+                    <td>{{ comment['submission_time'] }}</td>
+                    <td>{{ comment['message'] }}</td>
+                    <td>{{ comment['edited_count'] }}</td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+    {% endif %}
     <form action="{{ url_for('route_delete_question', question_id=question['id']) }}">
         <button type="submit">Delete</button>
         <a id="button1" href="{{ url_for('route_add_comment', question_id=question['id']) }}">Add comment</a>
