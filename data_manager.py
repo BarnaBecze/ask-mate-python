@@ -53,6 +53,13 @@ def get_next_id(type):
     return max([e['id'] for e in existing_data]) + 1
 
 
+@connection_handler
+def update_question_vote(cursor, question_id, increment):
+    query = sql.SQL('UPDATE question '
+                    f'SET vote_number = vote_number + {increment} WHERE id = {question_id} AND vote_number BETWEEN -10 AND 200;')
+    cursor.execute(query)
+
+
 
 @connection_handler
 def insert_into_database(cursor, table, data):
