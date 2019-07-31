@@ -7,20 +7,22 @@
 {% block content %}
     <h1 id="askmate">AskMate 2.0</h1>
     <div id="sorting_questions">
-    <form id="sorting" action="{{ url_for('index') }}" name="sort_by" method="get">
-        <label for="sort">Sort by:</label>
-        <select id="sort" name="sort">
-          <option value="submission_time">Date</option>
-          <option value="vote_number">Votes</option>
-          <option value="view_number">Number of views</option>
-        </select>
-        <label id="direction_label" for="direction">Order:</label>
-        <select name="direction" id="direction">
-            <option value="ASC">Ascending</option>
-            <option value="DESC">Descending</option>
-        </select>
-        <button type="submit">Sort</button>
-    </form>
+    {% if not latest %}
+        <form id="sorting" action="{{ url_for('index') }}" name="sort_by" method="get">
+            <label for="sort">Sort by:</label>
+            <select id="sort" name="sort">
+              <option value="submission_time">Date</option>
+              <option value="vote_number">Votes</option>
+              <option value="view_number">Number of views</option>
+            </select>
+            <label id="direction_label" for="direction">Order:</label>
+            <select name="direction" id="direction">
+                <option value="ASC">Ascending</option>
+                <option value="DESC">Descending</option>
+            </select>
+            <button type="submit">Sort</button>
+        </form>
+    {% endif %}
     </div>
     <table id="indexTable">
         <thead>
@@ -42,5 +44,8 @@
     </table>
     <div id="button1_container">
         <p><a id="button1" href="{{ url_for('route_ask_question') }}">Ask Question</a></p>
+    {% if latest %}
+        <a href="{{ url_for('index') }}">Show All</a>
+    {% endif %}
     </div>
 {% endblock %}

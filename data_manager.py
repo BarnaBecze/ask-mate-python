@@ -2,19 +2,22 @@ from connection import connection_handler
 from psycopg2 import sql
 
 @connection_handler
-def list_questions(cursor, sort=None, direction=None):
+def list_questions(cursor, sort=None, direction=None, latest=None):
     if sort:
         cursor.execute(f'''
                         SELECT * FROM question
-                        ORDER BY {sort} {direction}''')
+                        ORDER BY {sort} {direction};''')
     else:
-        cursor.execute('''
-                        SELECT * FROM question
-                        ORDER BY submission_time;
-                        ''')
+        query = ('''
+                 SELECT * FROM question
+                 ORDER BY submission_time DESC
+                 ''')
+        if latest:
+            query += 'LIMIT 5;'
+        cursor.execute(query)
     questions = cursor.fetchall()
-    print()
     return questions
+
 
 @connection_handler
 def display_question(cursor, question_id):
@@ -71,9 +74,18 @@ def insert_into_database(cursor, table, data):
 def delete_from_database(cursor, id, question=False):
 
     if question:
-        query_question = f'DELETE FROM question WHERE id={id}'
-        cursor.execute(query_question)
+        query_tag = '''DELETE FROM tag WHERE id = (SELECT tag_id FROM question_tag WHERE question_id = id)'''
+        cursor.execute(query_tag)
+        query_question_tag = f'DELETE FROM question_tag WHERE question_id={id}'
+        cursor.execute(query_question_tag)
+        query_comment_question = f'DELETE FROM comment WHERE question_id={id} OR answer_id IN (SELECT id FROM answer WHERE question_id={id})'
+        cursor.execute(query_comment_question)
         query_answers = f'DELETE FROM answer WHERE question_id={id}'
         cursor.execute(query_answers)
-    query = f'DELETE FROM answer WHERE id={id}'
-    cursor.execute(query)
+        query_question = f'DELETE FROM question WHERE id={id}'
+        cursor.execute(query_question)
+
+    query_comment = f'DELETE FROM comment WHERE answer_id={id}'
+    cursor.execute(query_comment)
+    query_answer = f'DELETE FROM answer WHERE id={id}'
+    cursor.execute(query_answer)
