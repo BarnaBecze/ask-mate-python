@@ -57,7 +57,7 @@ def get_next_id(cursor, item_type):
 @connection_handler
 def update_question_vote(cursor, table, increment, id=None):
     query = sql.SQL(f'UPDATE {table} '
-                    f'SET vote_number = vote_number + 1 WHERE id = {id};')
+                    f'SET vote_number = vote_number + {increment} WHERE id = {id} AND vote_number BETWEEN -10 AND 200;')
     cursor.execute(query)
 
 
