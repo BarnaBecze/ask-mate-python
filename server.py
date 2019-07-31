@@ -75,7 +75,7 @@ def route_delete_answer(question_id, answer_id):
 
 
 @app.route('/question/<question_id>/vote-up', methods=['GET', 'POST'])
-def route_vote_up(question_id, answer_id=None):
+def route_vote_up(question_id, answer_id):
     increment = 1
     if request.method == 'POST':
         data_manager.update_question_vote('answer', question_id,  increment, answer_id)
