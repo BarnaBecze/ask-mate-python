@@ -75,20 +75,22 @@ def route_delete_answer(question_id, answer_id):
 
 
 @app.route('/question/<question_id>/vote-up', methods=['GET', 'POST'])
-def route_vote_up(question_id, answer_id=None):
+def route_vote_up(question_id):
     increment = 1
     if request.method == 'POST':
-        data_manager.update_question_vote('answer', question_id,  increment, answer_id)
+        answer_id = request.args.get('answer_id')
+        print(answer_id)
+        data_manager.update_question_vote('answer', increment, id=answer_id)
     else:
-        data_manager.update_question_vote('question', question_id, increment)
+        data_manager.update_question_vote('question', increment, id=question_id)
     return redirect(url_for('route_questions', question_id=question_id))
 
 
 @app.route('/question/<question_id>/vote-down', methods=['GET', 'POST'])
-def route_vote_down(question_id, answer_id=None):
+def route_vote_down(question_id):
     increment = -1
     if request.method == 'POST':
-        data_manager.update_question_vote('answer', question_id,  increment, answer_id)
+        data_manager.update_question_vote('answer', question_id,  increment, answer_id=True)
     else:
         data_manager.update_question_vote('question', question_id, increment)
     return redirect(url_for('route_questions', question_id=question_id))
