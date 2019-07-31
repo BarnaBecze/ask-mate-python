@@ -44,6 +44,7 @@ def display_answers(cursor, question_id=None):
         answers = cursor.fetchall()
         return answers
 
+
 @connection_handler
 def get_next_id(cursor, item_type):
     cursor.execute(f'SELECT MAX(id) AS max_id FROM {item_type};')
@@ -52,10 +53,11 @@ def get_next_id(cursor, item_type):
         return 1
     return max_id['max_id'] + 1
 
+
 @connection_handler
 def update_question_vote(cursor, table, increment, id=None):
     query = sql.SQL(f'UPDATE {table} '
-                    f'SET vote_number = vote_number + 1 WHERE id = {id} AND vote_number BETWEEN -10 AND 200;')
+                    f'SET vote_number = vote_number + 1 WHERE id = {id};')
     cursor.execute(query)
 
 
