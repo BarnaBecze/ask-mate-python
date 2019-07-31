@@ -31,16 +31,6 @@ def display_question(cursor, question_id):
 
 
 @connection_handler
-def display_comments(cursor):
-    cursor.execute('''
-                    SELECT * FROM comment;
-                    ''')
-    comments = cursor.fetchall()
-
-    return comments
-
-
-@connection_handler
 def display_answers(cursor, question_id=None):
     if question_id:
         cursor.execute('''
@@ -55,29 +45,20 @@ def display_answers(cursor, question_id=None):
         return answers
 
 
-def get_next_id(type):
-    if type == 'question':
-        existing_data = list_questions()
-    elif type == 'answer':
-        existing_data = display_answers()
-    elif type == 'comment':
-        existing_data = display_comments()
-    if len(existing_data) == 0:
-        return '1'
-
-    return max([e['id'] for e in existing_data]) + 1
+@connection_handler
+def get_next_id(cursor, item_type):
+    cursor.execute(f'SELECT MAX(id) AS max_id FROM {item_type};')
+    max_id = cursor.fetchone()
+    if max_id == 0:
+        return 1
+    return max_id['max_id'] + 1
 
 
 @connection_handler
-def update_question_vote(cursor, table, question_id, increment, answer_id=None):
-    if answer_id:
-        query = sql.SQL(f'UPDATE {table} '
-                        f'SET vote_number = vote_number + {increment} WHERE id = {answer_id} AND vote_number BETWEEN -10 AND 200;')
-        cursor.execute(query)
-    else:
-        query = sql.SQL(f'UPDATE {table} '
-                        f'SET vote_number = vote_number + {increment} WHERE id = {question_id} AND vote_number BETWEEN -10 AND 200;')
-        cursor.execute(query)
+def update_question_vote(cursor, table, increment, id=None):
+    query = sql.SQL(f'UPDATE {table} '
+                    f'SET vote_number = vote_number + {increment} WHERE id = {id} AND vote_number BETWEEN -10 AND 200;')
+    cursor.execute(query)
 
 
 @connection_handler
@@ -106,3 +87,16 @@ def delete_from_database(cursor, id, question=False):
     cursor.execute(query_comment)
     query_answer = f'DELETE FROM answer WHERE id={id}'
     cursor.execute(query_answer)
+
+
+@connection_handler
+def search_in_db(cursor, search_phrase):
+    cursor.execute(f"""
+                    SELECT * FROM answer
+                    WHERE message LIKE '%{search_phrase}%';""")
+    answers = cursor.fetchall()
+    cursor.execute(f"""
+                    SELECT * FROM question
+                    WHERE message LIKE '%{search_phrase}%' OR title LIKE '%{search_phrase}%';""")
+    questions = cursor.fetchall()
+    return answers, questions

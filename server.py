@@ -62,52 +62,47 @@ def route_post_answer(question_id):
     return render_template('answers.html', answer=answer, id=question_id)
 
 
-@app.route('/question/<question_id>/delete', methods=['GET', 'DELETE'])
+@app.route('/question/<question_id>/delete', methods=['GET', 'POST'])
 def route_delete_question(question_id):
     data_manager.delete_from_database(question_id, question=True)
     return redirect('/')
 
 
-@app.route('/question/<question_id>/<answer_id>/delete', methods=['GET', 'DELETE'])
+@app.route('/question/<question_id>/<answer_id>/delete', methods=['GET', 'POST'])
 def route_delete_answer(question_id, answer_id):
     data_manager.delete_from_database(answer_id)
     return redirect(url_for('route_questions', question_id=question_id))
 
 
-@app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
-def route_add_comment(question_id):
-    comment = {}
-    if request.method == 'POST':
-        comment = {
-            'id': data_manager.get_next_id('comment'),
-            'question_id': question_id,
-            'answer_id': None,
-            'message': request.form.get('message'),
-            'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            'edited_count': 0
-        }
-        data_manager.insert_into_database('comment', comment)
-        return redirect(url_for('route_questions', question_id=question_id))
-    return render_template('comment.html', comment=comment, id=question_id)
-
-
 @app.route('/question/<question_id>/vote-up', methods=['GET', 'POST'])
-def route_vote_up(question_id, answer_id=None):
+def route_vote_up(question_id):
     increment = 1
+    print("up")
     if request.method == 'POST':
-        data_manager.update_question_vote('answer', question_id,  increment, answer_id)
+        answer_id = request.args.get('answer_id')
+        data_manager.update_question_vote('answer', increment, id=answer_id)
     else:
-        data_manager.update_question_vote('question', question_id, increment)
+        data_manager.update_question_vote('question', increment, id=question_id)
+    return redirect(url_for('route_questions', question_id=question_id))
 
 
 @app.route('/question/<question_id>/vote-down', methods=['GET', 'POST'])
-def route_vote_down(question_id, answer_id=None):
+def route_vote_down(question_id):
     increment = -1
+    print("down")
     if request.method == 'POST':
-        data_manager.update_question_vote('answer', question_id,  increment, answer_id)
+        answer_id = request.args.get('answer_id')
+        data_manager.update_question_vote('answer', increment, id=answer_id)
     else:
-        data_manager.update_question_vote('question', question_id, increment)
+        data_manager.update_question_vote('question', increment, id=question_id)
     return redirect(url_for('route_questions', question_id=question_id))
+
+
+@app.route('/search')
+def search_questions_answers():
+    search_phrase = request.args.get('search_phrase')
+    vals = data_manager.search_in_db(search_phrase)
+    return render_template()
 
 
 if __name__ == '__main__':
