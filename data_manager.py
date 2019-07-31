@@ -91,10 +91,10 @@ def delete_from_database(cursor, id, question=False):
 def search_in_db(cursor, search_phrase):
     cursor.execute(f"""
                     SELECT * FROM answer
-                    WHERE message LIKE '%{search_phrase}%'""")
+                    WHERE message LIKE '%{search_phrase}%';""")
     answers = cursor.fetchall()
     cursor.execute(f"""
                     SELECT * FROM question
-                    WHERE (title OR message) LIKE '%{search_phrase}%'""")
+                    WHERE message LIKE '%{search_phrase}%' OR title LIKE '%{search_phrase}%';""")
     questions = cursor.fetchall()
     return answers, questions

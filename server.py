@@ -99,7 +99,8 @@ def route_vote_down(question_id):
 @app.route('/search')
 def search_questions_answers():
     search_phrase = request.args.get('search_phrase')
-    print(search_phrase)
+    vals = data_manager.search_in_db(search_phrase)
+    return render_template()
 
 
 if __name__ == '__main__':
