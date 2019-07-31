@@ -1,0 +1,6 @@
+<header>
+    <form action="{{ url_for('search_questions_answers', search_phrase=search_phrase) }}" method="get">
+        <input type="text" name="search_phrase" placeholder="search in question and answers" minlength="3" required>search_phrase
+        <button type="submit">Search</button>
+    </form>
+</header>
