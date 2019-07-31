@@ -36,10 +36,16 @@
                     {% endif %}
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <p>siia tuleb kommentaar</p>
+                    </td>
+                </tr>
             </tbody>
         </table>
     <form action="{{ url_for('route_delete_question', question_id=question['id']) }}">
         <button type="submit">Delete</button>
+        <a id="button1" href="{{ url_for('route_add_comment', question_id=question['id']) }}">Add comment</a>
     </form>
     <h1>Answers</h1>
     {% if answers %}
