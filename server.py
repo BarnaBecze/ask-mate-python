@@ -74,6 +74,18 @@ def route_post_answer(question_id):
     return render_template('answers.html', answer=answer, id=question_id)
 
 
+@app.route('/question/<question_id>/vote-up')
+def route_vote_up(question_id):
+    data_manager.update_question_vote(question_id, increment=1)
+    return redirect(url_for('route_questions', question_id=question_id))
+
+
+@app.route('/question/<question_id>/vote-down')
+def route_vote_down(question_id):
+    data_manager.update_question_vote(question_id, increment=-1)
+    return redirect(url_for('route_questions', question_id=question_id))
+
+
 if __name__ == '__main__':
     app.run(
         port=5000,

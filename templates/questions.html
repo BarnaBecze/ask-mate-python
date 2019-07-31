@@ -20,7 +20,14 @@
                 <tr>
                     <td>{{ question['submission_time'] }}</td>
                     <td>{{ question['view_number'] }}</td>
-                    <td>{{ question['vote_number'] }}</td>
+                    <td><form action="{{ url_for('route_vote_up', question_id=question['id']) }}" method="get">
+                            <button type="submit">Up</button>
+                        </form>
+                        <form action="{{ url_for('route_vote_down', question_id=question['id']) }}" method="get">
+                            <button type="submit">Down</button>
+                        </form>
+                        {{ question['vote_number'] }}
+                    </td>
                     <td>{{ question['message'] }}
                     {% if question['image'] %}
                         <img src="{{ question['image'] }}" alt="img">
