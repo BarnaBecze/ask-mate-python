@@ -33,8 +33,8 @@ def route_ask_question():
         new_question = {
             'id': data_manager.get_next_id('question'),
             'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            'view_number': '100',
-            'vote_number': '100',
+            'view_number': '0',
+            'vote_number': '0',
             'title': request.form.get('title'),
             'message': request.form.get('message'),
             'image': None
@@ -43,6 +43,23 @@ def route_ask_question():
         data_manager.insert_into_database('question', new_question)
         return redirect(url_for('route_questions', question_id=new_question['id']))
     return render_template('ask_question.html', new_question=new_question)
+
+
+@app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
+def route_post_answer(question_id):
+    answer = {}
+    if request.method == 'POST':
+        answer = {
+            'id': data_manager.get_next_id('answer'),
+            'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            'vote_number': '0',
+            'question_id': question_id,
+            'message': request.form.get('message'),
+            'image': None
+        }
+        data_manager.insert_into_database('answer', answer)
+        return redirect(url_for('route_questions', question_id=question_id))
+    return render_template('answers.html', answer=answer, id=question_id)
 
 
 @app.route('/question/<question_id>/delete', methods=['GET', 'POST'])
@@ -57,32 +74,23 @@ def route_delete_answer(question_id, answer_id):
     return redirect(url_for('route_questions', question_id=question_id))
 
 
-@app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
-def route_post_answer(question_id):
-    answer = {}
+@app.route('/question/<question_id>/vote-up', methods=['GET', 'POST'])
+def route_vote_up(question_id, answer_id=None):
+    increment = 1
     if request.method == 'POST':
-        answer = {
-            'id': data_manager.get_next_id('answer'),
-            'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            'vote_number': 0,
-            'question_id': question_id,
-            'message': request.form.get('message'),
-            'image': None
-        }
-        data_manager.insert_into_database('answer', answer)
-        return redirect(url_for('route_questions', question_id=question_id))
-    return render_template('answers.html', answer=answer, id=question_id)
-
-
-@app.route('/question/<question_id>/vote-up')
-def route_vote_up(question_id):
-    data_manager.update_question_vote(question_id, increment=1)
+        data_manager.update_question_vote('answer', question_id,  increment, answer_id)
+    else:
+        data_manager.update_question_vote('question', question_id, increment)
     return redirect(url_for('route_questions', question_id=question_id))
 
 
-@app.route('/question/<question_id>/vote-down')
-def route_vote_down(question_id):
-    data_manager.update_question_vote(question_id, increment=-1)
+@app.route('/question/<question_id>/vote-down', methods=['GET', 'POST'])
+def route_vote_down(question_id, answer_id=None):
+    increment = -1
+    if request.method == 'POST':
+        data_manager.update_question_vote('answer', question_id,  increment, answer_id)
+    else:
+        data_manager.update_question_vote('question', question_id, increment)
     return redirect(url_for('route_questions', question_id=question_id))
 
 

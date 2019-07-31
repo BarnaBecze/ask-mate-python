@@ -55,7 +55,14 @@
             <tbody>
                 <tr>
                     <td>{{ answer['submission_time'] }}</td>
-                    <td>{{ answer['vote_number'] }}</td>
+                    <td><form action="{{ url_for('route_vote_up', question_id=question['id'], answer_id=answer['id']) }}" method="post">
+                            <button type="submit">Up</button>
+                        </form>
+                        <form action="{{ url_for('route_vote_down', question_id=question['id'], answer_id=answer['id']) }}" method="post">
+                            <button type="submit">Down</button>
+                        </form>
+                        {{ answer['vote_number'] }}
+                    </td>
                     <td>{{ answer['message'], answer['image'] }}</td>
                     <td><form action="{{ url_for('route_delete_answer', answer_id=answer['id'],
                      question_id=answer['question_id']) }}" >
