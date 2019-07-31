@@ -56,12 +56,12 @@ def get_next_id(type):
     return max([e['id'] for e in existing_data]) + 1
 
 
-
 @connection_handler
 def insert_into_database(cursor, table, data):
     query = sql.SQL('INSERT INTO {} '
                     'VALUES ({});').format(sql.Identifier(table), sql.SQL(', ').join(map(sql.Placeholder, data)))
     cursor.execute(query, data)
+
 
 @connection_handler
 def delete_from_database(cursor, id, question=False):
