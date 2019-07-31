@@ -57,10 +57,15 @@ def get_next_id(type):
 
 
 @connection_handler
-def update_question_vote(cursor, question_id, increment):
-    query = sql.SQL('UPDATE question '
-                    f'SET vote_number = vote_number + {increment} WHERE id = {question_id} AND vote_number BETWEEN -10 AND 200;')
-    cursor.execute(query)
+def update_question_vote(cursor, table, question_id, increment, answer_id=None):
+    if answer_id:
+        query = sql.SQL(f'UPDATE {table} '
+                        f'SET vote_number = vote_number + {increment} WHERE id = {answer_id} AND vote_number BETWEEN -10 AND 200;')
+        cursor.execute(query)
+    else:
+        query = sql.SQL(f'UPDATE {table} '
+                        f'SET vote_number = vote_number + {increment} WHERE id = {question_id} AND vote_number BETWEEN -10 AND 200;')
+        cursor.execute(query)
 
 
 @connection_handler
