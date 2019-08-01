@@ -102,8 +102,9 @@ def delete_from_database(cursor, id, question=False):
 @connection_handler
 def search_in_db(cursor, search_phrase):
     cursor.execute(f"""
-                    SELECT question.message AS que, answer.message AS ans, answer.question_id AS qid FROM answer
+                    SELECT question.message AS que, answer.message AS ans, answer.question_id AS qid,
+                    question.title AS title FROM answer
                     JOIN question ON answer.question_id = question.id
-                    WHERE answer.message LIKE '%{search_phrase}%' OR question.message LIKE '%{search_phrase}%';""")
+                    WHERE LOWER(answer.message) LIKE '%{search_phrase}%' OR LOWER(question.message) LIKE '%{search_phrase}%' OR LOWER(question.title) LIKE '%{search_phrase}%';""")
     results = cursor.fetchall()
     return results
