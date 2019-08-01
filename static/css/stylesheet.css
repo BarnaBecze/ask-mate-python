@@ -92,3 +92,8 @@ textarea {
     position: relative;
     left: 2%;
 }
+
+keyword {
+    background-color: yellow;
+    color: black;
+}

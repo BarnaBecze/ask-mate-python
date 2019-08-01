@@ -1,10 +1,26 @@
 {% extends 'layout.html' %}
 
+{% include 'header.html' %}
+
 {% block title %}
     Search results
 {% endblock %}
 
 {% block content %}
     <h1>Search results</h1>
-
-{% endblock
+    <ul>
+        {% with qids = [] %}
+        {% for result in results %}
+        {% autoescape false %}
+            {% if result.qid not in qids %}
+                <li><a href="{{ url_for('route_questions', question_id=result.qid) }}">{{ result.que | replace(keyword, "<mark>%s</mark>" % keyword) }}</a></li> {{ qids.append(result.qid) }}
+            {% endif %}
+            {% if keyword in result.ans %}
+                <li>{{ result.ans | replace(keyword, "<mark>%s</mark>" % keyword) }}</li>
+            {% endif %}
+        {% endautoescape %}
+        {% endfor %}
+        {% endwith %}
+    </ul>
+    <p><a href="{{ url_for('list_latest_questions') }}">Home</a></p>
+{% endblock %}
