@@ -38,12 +38,12 @@
                 </tr>
                 <tr>
                     <td>
-
+                        <h3>Comments</h3>
                     </td>
                 </tr>
             </tbody>
         </table>
-        {% if comments %}
+        {% if comments_for_question %}
         <table id="question_table">
             <thead>
                 <tr>
@@ -52,7 +52,7 @@
                     <th>Edited</th>
                 </tr>
             </thead>
-            {% for comment in comments %}
+            {% for comment in comments_for_question %}
             <tbody>
                 <tr>
                     <td>{{ comment['submission_time'] }}</td>
@@ -65,7 +65,7 @@
     {% endif %}
     <form action="{{ url_for('route_delete_question', question_id=question['id']) }}">
         <button type="submit">Delete</button>
-        <a id="button1" href="{{ url_for('route_add_comment', question_id=question['id']) }}">Add comment</a>
+        <a id="button1" href="{{ url_for('route_add_comment_to_question', question_id=question['id']) }}">Add comment</a>
     </form>
     <h1>Answers</h1>
     {% if answers %}
@@ -90,6 +90,9 @@
                         {{ answer['vote_number'] }}
                     </td>
                     <td>{{ answer['message'], answer['image'] }}</td>
+                    <td>
+                        <a id="button1" href="{{ url_for('route_add_comment_to_answer', question_id=question['id'], answer_id=answer['id']) }}">Add comment</a>
+                    </td>
                     <td><form action="{{ url_for('route_delete_answer', answer_id=answer['id'],
                      question_id=answer['question_id']) }}" >
                         <button id="delete" type="submit">Delete answer</button>
@@ -99,6 +102,9 @@
             </tbody>
             {% endfor %}
         </table>
+    {% if comments_for_answer %}
+
+    {% endif %}
     {% elif not answer %}
     <p>No answers yet!</p>
     {% endif %}

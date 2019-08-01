@@ -46,11 +46,21 @@ def display_answers(cursor, question_id=None):
 
 
 @connection_handler
-def display_comments(cursor, question_id):
+def display_comments_for_question(cursor, question_id):
     cursor.execute('''
                     SELECT * FROM comment
                     WHERE question_id='%s';
                     ''' % question_id)
+    comments = cursor.fetchall()
+    return comments
+
+
+@connection_handler
+def display_comments_for_answer(cursor, answer_id):
+    cursor.execute('''
+                    SELECT * FROM comment
+                    WHERE answer_id='%s';
+                    ''' % answer_id)
     comments = cursor.fetchall()
     return comments
 
