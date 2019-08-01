@@ -8,20 +8,20 @@
 
 {% block content %}
     <h1>Search results</h1>
-    <ul>
+    <ol>
         {% with qids = [] %}
         {% for result in results %}
         {% autoescape false %}
             {% if result.qid not in qids %}
-        <li><a href="{{ url_for('route_questions', question_id=result.qid) }}">{{ result.title | replace(keyword, "<mark>%s</mark>" % keyword) }}</a></li>
-                <li>{{ result.que | replace(keyword, "<mark>%s</mark>" % keyword) }}</li> {{ qids.append(result.qid) }}
+        <li><a href="{{ url_for('route_questions', question_id=result.qid) }}">{{ result.title | replace(keyword, "<mark>%s</mark>" % keyword) }}</a><br>
+            {{ result.que | replace(keyword, "<mark>%s</mark>" % keyword) }} {{ qids.append(result.qid) }}
             {% endif %}
             {% if keyword in result.ans %}
-                <li>{{ result.ans | replace(keyword, "<mark>%s</mark>" % keyword) }}</li>
+                <p class="answer_message">{{ result.ans | replace(keyword, "<mark>%s</mark>" % keyword) }}</p></li>
             {% endif %}
         {% endautoescape %}
         {% endfor %}
         {% endwith %}
-    </ul>
+    </ol>
     <p><a href="{{ url_for('list_latest_questions') }}">Home</a></p>
 {% endblock %}
