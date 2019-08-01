@@ -4,11 +4,14 @@
     AskMate 2.0
 {% endblock %}
 
-{% include 'header.html' %}
-
 {% block content %}
-    <h1 id="askmate">AskMate 2.0</h1>
-    <div id="sorting_questions">
+    <div id="toolbar">
+        <a id="button1" href="{{ url_for('route_ask_question') }}">Ask Question</a>
+    {% if latest %}
+        <a id="button2" href="{{ url_for('index') }}">Show All</a>
+    {% endif %}
+    </div>
+    <div id="search">
     {% if not latest %}
         <form id="sorting" action="{{ url_for('index') }}" name="sort_by" method="get">
             <label for="sort">Sort by:</label>
@@ -29,9 +32,9 @@
     <table id="indexTable">
         <thead>
             <tr>
-                <th>Views</th>
-                <th>Votes</th>
-                <th>Title</th>
+                <th><i class="fa fa-eye"></i></th>
+                <th><i class="fa fa-arrow-up"></i><i class="fa fa-arrow-down"></i></th>
+                <th><i class="fa fa-link"></i></th>
             </tr>
         </thead>
         <tbody>
@@ -44,10 +47,4 @@
         {% endfor %}
         </tbody>
     </table>
-    <div id="button1_container">
-        <p><a id="button1" href="{{ url_for('route_ask_question') }}">Ask Question</a></p>
-    {% if latest %}
-        <a href="{{ url_for('index') }}">Show All</a>
-    {% endif %}
-    </div>
 {% endblock %}

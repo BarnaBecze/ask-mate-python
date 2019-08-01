@@ -4,8 +4,6 @@
     AskMate 2.0
 {% endblock %}
 
-{% include 'header.html' %}
-
 {% block content %}
 
     <h1>{{ question['title'] }}</h1>
@@ -109,7 +107,6 @@
     <p>No answers yet!</p>
     {% endif %}
     <form action="{{ url_for('route_post_answer', question_id=question['id'])}}">
-        <button class="button2" formnovalidate formaction="{{ url_for('index') }}" type="submit">Home</button>
         <button type="submit">Post answer</button>
     </form>
 {% endblock %}
