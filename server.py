@@ -34,6 +34,7 @@ def route_ask_question():
     if request.method == 'POST':
         new_question = {
             'id': data_manager.get_next_id('question'),
+            'users_id': None,
             'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             'view_number': '0',
             'vote_number': '0',
@@ -53,6 +54,7 @@ def route_post_answer(question_id):
     if request.method == 'POST':
         answer = {
             'id': data_manager.get_next_id('answer'),
+            'users_id': None,
             'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             'vote_number': '0',
             'question_id': question_id,
@@ -71,6 +73,7 @@ def route_add_comment_to_question(question_id):
     if request.method == 'POST':
         comment = {
             'id': data_manager.get_next_id('comment'),
+            'users_id' : None,
             'question_id': question_id,
             'answer_id': None,
             'message': request.form.get('message'),
@@ -90,6 +93,7 @@ def route_add_comment_to_answer(question_id, answer_id):
     if request.method == 'POST':
         comment = {
             'id': data_manager.get_next_id('comment'),
+            'users_id': None,
             'question_id': None,
             'answer_id': answer_id,
             'message': request.form.get('message'),
@@ -143,6 +147,14 @@ def search_questions_answers():
     search_phrase = request.args.get('search_phrase')
     results = data_manager.search_in_db(search_phrase.lower())
     return render_template('search_results.html', results=results, keyword=search_phrase)
+
+
+@app.route('/registration', methods=['GET', 'POST'])
+def route_registration():
+    if request.method == "POST":
+        return redirect('/list')
+    else:
+        return render_template('registration.html')
 
 
 if __name__ == '__main__':
