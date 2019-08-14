@@ -5,46 +5,48 @@
 {% endblock %}
 
 {% block content %}
-    <div id="toolbar">
-        <a id="button1" href="{{ url_for('route_ask_question') }}">Ask Question</a>
-    {% if latest %}
-        <a id="button2" href="{{ url_for('index') }}">Show All</a>
-    {% endif %}
+    <div class="d-flex flex-row">
+        <div class="mr-auto p-2">
+            <form action="{{ url_for('search_questions_answers', search_phrase=search_phrase) }}" method="get">
+                <input type="text" name="search_phrase" placeholder="Search in question and answers..." minlength="3" required>
+                <button id="search_button" class="btn btn-primary" type="submit">Search</button>
+            </form>
+        </div>
+        <div class="p-2">
+            <form id="sorting" action="{{ url_for('index') }}" name="sort_by" method="get">
+                <label for="sort">Sort by:</label>
+                <select id="sort" name="sort">
+                  <option value="submission_time">Date</option>
+                  <option value="vote_number">Votes</option>
+                  <option value="view_number">Number of views</option>
+                </select>
+                <label id="direction_label" for="direction">Order:</label>
+                <select name="direction" id="direction">
+                    <option value="ASC">Ascending</option>
+                    <option value="DESC">Descending</option>
+                </select>
+                <button type="button" class="btn btn-primary">Sort</button>
+            </form>
+        </div>
     </div>
-    <div id="search">
-    {% if not latest %}
-        <form id="sorting" action="{{ url_for('index') }}" name="sort_by" method="get">
-            <label for="sort">Sort by:</label>
-            <select id="sort" name="sort">
-              <option value="submission_time">Date</option>
-              <option value="vote_number">Votes</option>
-              <option value="view_number">Number of views</option>
-            </select>
-            <label id="direction_label" for="direction">Order:</label>
-            <select name="direction" id="direction">
-                <option value="ASC">Ascending</option>
-                <option value="DESC">Descending</option>
-            </select>
-            <button type="submit">Sort</button>
-        </form>
-    {% endif %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th><i class="fa fa-eye"></i></th>
+                    <th><i class="fa fa-arrow-up"></i><i class="fa fa-arrow-down"></i></th>
+                    <th><i class="fa fa-link"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for question in questions %}
+                <tr>
+                    <td>{{ question['view_number'] }}</td>
+                    <td>{{ question['vote_number'] }}</td>
+                    <td><a href="{{ url_for('route_questions', question_id=question['id']) }}">{{ question['title'] }}</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
-    <table id="indexTable">
-        <thead>
-            <tr>
-                <th><i class="fa fa-eye"></i></th>
-                <th><i class="fa fa-arrow-up"></i><i class="fa fa-arrow-down"></i></th>
-                <th><i class="fa fa-link"></i></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for question in questions %}
-            <tr>
-                <td>{{ question['view_number'] }}</td>
-                <td>{{ question['vote_number'] }}</td>
-                <td><a href="{{ url_for('route_questions', question_id=question['id']) }}">{{ question['title'] }}</a></td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 {% endblock %}

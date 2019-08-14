@@ -6,83 +6,18 @@ body {
     overflow: scroll;
 }
 
-table {
-    font-size: 20px;
-    background-color: #D8D8D8;
-}
 
-tr:nth-child(odd) {
-    background-color: #f2f2f2;
-}
-#indexTable {
-    position: absolute;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    top: 30%;
-    left: 15%;
-}
-#indexTable table {
-    max-width: 200px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    margin: 0;
-    position: absolute;
-    top: 35%;
-}
-#indexTable tr td:first-child, #question_table tr td:nth-child(2), #question_table tr td:nth-child(3) {
-    width: 100px;
-    text-align: center;
-}
 
-#indexTable tr td:nth-child(2) {
-    width: 100px;
-    text-align: center;
-}
-
-#indexTable tr td:last-child {
-    width: 800px;
-}
-td {
-    padding: 2%;
-}
-
-#question_table tr td:nth-child(1) {
-    width: 150px;
-    text-align: center;
-}
-#question_table tr td:nth-child(4) {
-    width: 1000px;
-}
-
-#list_all, #button1, #button2, button {
+.btn {
     background-color: #72add1;
-    border: none;
-    color: white;
-    padding: 15px 32px;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 0 auto;
-    transition-duration: 0.4s;
-    cursor: pointer;
+    border-color: #72add1;
 }
 
-#list_all:hover, button:hover, #button1:hover, #button2:hover {
+.btn:hover {
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 
 }
 
-#toolbar {
-    position: absolute;
-    left: 12.4%;
-    top: 20%;
-}
-
-#search {
-    position: absolute;
-    top: 20%;
-    right: 12.4%;
-}
 label {
     font-size: 20px;
 }
@@ -104,29 +39,9 @@ header {
     background-color: black;
     position: relative;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 90px;
 }
 
-header form {
-    position: absolute;
-    margin: 0;
-    top: 50%;
-    left: 7%;
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-    max-width: 200px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box
-}
-
-
-header form input {
-    position: relative;
-    width: 120%;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    font-size: 1rem;
-
-}
 #search_button {
     display: none;
 }
@@ -164,4 +79,35 @@ input[type=text] {
 .logo a {
     text-decoration: none;
     color: black;
+}
+
+nav {
+    background-color: #72add1;
+    top: 100%;
+}
+
+#button1 {
+    color: white;
+}
+
+.table {
+    margin: auto;
+    width: 80%;
+    text-align: center;
+}
+
+.table td:last-child {
+    text-align: left;
+}
+
+.d-flex {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.sorting {
+    position: relative;
+    left: 60%;
 }

@@ -172,10 +172,12 @@ def route_login():
         username = request.form.get('username')
         password = request.form.get('password')
         login_info = data_manager.get_user_login_info(username)
-        if login_info:
-            if hash.verify_password(password, login_info['password']):
-                return redirect('/list')
-
+        if login_info and hash.verify_password(password, login_info['password']):
+            print('GOOD')
+            return redirect('/list')
+        else:
+            print('BAD')
+            return redirect('/list')
 
 @app.route('/users')
 def route_users():

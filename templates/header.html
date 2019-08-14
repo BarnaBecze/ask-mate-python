@@ -1,16 +1,33 @@
 <header>
-    <div class="logo">
-        <h1><a href="{{ url_for('index') }}">AskMate 2.0</a></h1><br>
-        <h2>Powered by Codecool</h2>
-    </div>
-    <form action="{{ url_for('search_questions_answers', search_phrase=search_phrase) }}" method="get">
-        <input type="text" name="search_phrase" placeholder="Search in question and answers..." minlength="3" required>
-        <button id="search_button" type="submit">Search</button>
-    </form>
-    <form action="{{ url_for('route_login') }}" method="post">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="text" name="password" placeholder="Password" required>
-        <button id="login_button" type="submit">Login</button>
-    </form>
-    <a href="{{ url_for('route_registration') }}">Register</a>
+        <div class="logo">
+            <h1><a href="{{ url_for('index') }}">AskMate 2.0</a></h1><br>
+            <h2>Powered by Codecool</h2>
+        </div>
+<nav class="navbar navbar-expand-sm">
+    <ul class="navbar-nav">
+        <li class="ask-question">
+            <form id="login" class="form-inline" action="{{ url_for('route_login') }}" method="post">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <input type="text" name="username" placeholder="Username" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <input type="text" name="password" placeholder="Password" required>
+                </div>
+                <div class="form-group col-md-6">
+                </div>
+            </div>
+            </form>
+        </li>
+        <li>
+            <button form="login" id="login_button" class="btn btn-primary" type="submit">Login</button>
+        </li>
+        <li class="register">
+            <a href="{{ url_for('route_registration') }}" class="btn btn-primary">Register</a>
+        </li>
+        <li class="ask-question">
+            <a id="button1" class="btn btn-primary" href="{{ url_for('route_ask_question') }}">Ask Question</a>
+        </li>
+    </ul>
+</nav>
 </header>

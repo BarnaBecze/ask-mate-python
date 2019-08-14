@@ -21,10 +21,10 @@
                     <td>{{ question['submission_time'] }}</td>
                     <td>{{ question['view_number'] }}</td>
                     <td><form action="{{ url_for('route_vote_up', question_id=question['id']) }}" method="get">
-                            <button type="submit">Up</button>
+                            <button type="button" class="btn btn-primary">Up</button>
                         </form>
                         <form action="{{ url_for('route_vote_down', question_id=question['id']) }}" method="get">
-                            <button type="submit">Down</button>
+                            <button type="button" class="btn btn-primary">Down</button>
                         </form>
                         {{ question['vote_number'] }}
                     </td>
@@ -59,7 +59,7 @@
     {% endif %}
     <form action="{{ url_for('route_delete_question', question_id=question['id']) }}">
         <button type="submit">Delete</button>
-        <a id="button1" href="{{ url_for('route_add_comment_to_question', question_id=question['id']) }}">Add comment</a>
+        <a id="button1" class="btn btn-primary" href="{{ url_for('route_add_comment_to_question', question_id=question['id']) }}">Add comment</a>
     </form>
     <h1>Answers</h1>
     {% if answers %}
@@ -76,20 +76,20 @@
                 <tr>
                     <td>{{ answer['submission_time'] }}</td>
                     <td><form action="{{ url_for('route_vote_up', question_id=question['id'], answer_id=answer['id']) }}" name="answer_id" method="post">
-                            <button type="submit">Up</button>
+                            <button type="button" class="btn btn-primary">Up</button>
                         </form>
                         <form action="{{ url_for('route_vote_down', question_id=question['id'], answer_id=answer['id']) }}" method="post">
-                            <button type="submit">Down</button>
+                            <button type="button" class="btn btn-primary">Down</button>
                         </form>
                         {{ answer['vote_number'] }}
                     </td>
                     <td>{{ answer['message'], answer['image'] }}</td>
                     <td>
-                        <a id="button1" href="{{ url_for('route_add_comment_to_answer', question_id=question['id'], answer_id=answer['id']) }}">Add comment</a>
+                        <a id="button1" class="btn btn-primary" href="{{ url_for('route_add_comment_to_answer', question_id=question['id'], answer_id=answer['id']) }}">Add comment</a>
                     </td>
                     <td><form action="{{ url_for('route_delete_answer', answer_id=answer['id'],
                      question_id=answer['question_id']) }}" >
-                        <button id="delete" type="submit">Delete answer</button>
+                        <button id="delete" class="btn btn-primary" type="submit">Delete answer</button>
                     </form>
                     </td>
                 </tr>
@@ -101,6 +101,6 @@
     <p>No answers yet!</p>
     {% endif %}
     <form action="{{ url_for('route_post_answer', question_id=question['id'])}}">
-        <button type="submit">Post answer</button>
+        <button type="submit" class="btn btn-primary">Post answer</button>
     </form>
 {% endblock %}
