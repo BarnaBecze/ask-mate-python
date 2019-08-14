@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+
+Registration
+
+{%  endblock %}
+
+
+{% block content %}
+
+<h1>Registration</h1>
+
+    <form action=" {{ url_for('route_registration') }}" method="post">
+        <label for="username">Username:</label>
+            <input type="text" name="username" placeholder="iliketurtles" required>
+        <label for="password">Password:</label>
+            <input type="text" name="password" placeholder="moonlandingwasfake" required>
+        <label for="confirm_password">Confirm password:</label>
+            <input type="text" name="confirm_password" placeholder="'Murica" required>
+        <label for="email">Email:</label>
+            <input type="text" name="email" placeholder="911wasaninsidejob" required>
+        <label for="confirm_email">Confirm email</label>
+            <input type="text" name="confirm_email" placeholder="jetfuelcantmeltsteelbeams" required>
+        <button type="submit">Register</button>
+    </form>
+
+{% endblock %}
