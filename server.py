@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import data_manager
 import hash
 from datetime import datetime
 
 app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -173,11 +174,15 @@ def route_login():
         password = request.form.get('password')
         login_info = data_manager.get_user_login_info(username)
         if login_info and hash.verify_password(password, login_info['password']):
-            print('GOOD')
-            return redirect('/list')
+            session['username'] = username
         else:
-            print('BAD')
-            return redirect('/list')
+            session['username'] = 'invalid'
+        return redirect('/list')
+
+@app.route('/logout')
+def route_logout():
+    session['username'] = None
+    return redirect('/list')
 
 @app.route('/users')
 def route_users():
