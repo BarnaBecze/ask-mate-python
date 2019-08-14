@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import data_manager
+import hash
 from datetime import datetime
 
 app = Flask(__name__)
@@ -152,9 +153,34 @@ def search_questions_answers():
 @app.route('/registration', methods=['GET', 'POST'])
 def route_registration():
     if request.method == "POST":
+        registration_data = {
+            'id': data_manager.get_next_id('users'),
+            'username': request.form.get('username'),
+            'password': hash.hash_password(request.form.get('password')),
+            'email': request.form.get('email'),
+            'registration_date': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+        data_manager.insert_into_database('users', registration_data)
         return redirect('/list')
     else:
         return render_template('registration.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def route_login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        login_info = data_manager.get_user_login_info(username)
+        if login_info:
+            if hash.verify_password(password, login_info['password']):
+                return redirect('/list')
+
+
+@app.route('/users')
+def route_users():
+    users = data_manager.get_user_data()
+    return render_template('users.html', users=users)
 
 
 if __name__ == '__main__':

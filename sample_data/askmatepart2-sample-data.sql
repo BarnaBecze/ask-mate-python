@@ -27,7 +27,7 @@ CREATE TABLE users (
     id serial NOT NULL,
     username text UNIQUE,
     password text,
-    salt text UNIQUE,
+    email text UNIQUE,
     registration_date timestamp without time zone
 );
 

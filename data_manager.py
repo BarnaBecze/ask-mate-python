@@ -69,9 +69,23 @@ def display_comments_for_answer(cursor, answer_id):
 def get_next_id(cursor, item_type):
     cursor.execute(f'SELECT MAX(id) AS max_id FROM {item_type};')
     max_id = cursor.fetchone()
-    if max_id == 0:
+    if not max_id['max_id']:
         return 1
     return max_id['max_id'] + 1
+
+
+@connection_handler
+def get_user_login_info(cursor, username):
+    cursor.execute(f"SELECT username, password FROM users WHERE username = '{username}'")
+    login_info = cursor.fetchone()
+    return login_info
+
+
+@connection_handler
+def get_user_data(cursor):
+    cursor.execute("SELECT id, username, email, registration_date FROM users")
+    user_data = cursor.fetchall()
+    return user_data
 
 
 @connection_handler
