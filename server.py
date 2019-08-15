@@ -179,10 +179,12 @@ def route_login():
             session['username'] = 'invalid'
         return redirect('/list')
 
+
 @app.route('/logout')
 def route_logout():
     session['username'] = None
     return redirect('/list')
+
 
 @app.route('/users')
 def route_users():

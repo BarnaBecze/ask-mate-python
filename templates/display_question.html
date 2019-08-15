@@ -7,7 +7,7 @@
 {% block content %}
 
     <h1>{{ question['title'] }}</h1>
-        <table id="question_table">
+        <table class="table">
             <thead>
                 <tr>
                     <th>Posted</th>
@@ -38,7 +38,7 @@
         </table>
         <h3>Comments</h3>
         {% if comments_for_question %}
-        <table>
+        <table class="table">
             <thead>
                 <tr>
                     <th>Posted</th>
@@ -63,7 +63,7 @@
     </form>
     <h1>Answers</h1>
     {% if answers %}
-        <table>
+        <table class="table">
             <thead>
                 <tr>
                     <th>Posted</th>
