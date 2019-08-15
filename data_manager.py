@@ -1,6 +1,7 @@
 from connection import connection_handler
 from psycopg2 import sql
 
+
 @connection_handler
 def list_questions(cursor, sort=None, direction=None, latest=None):
     if sort:
@@ -101,6 +102,12 @@ def update_question_vote(cursor, table, increment, id=None):
                     f'SET vote_number = vote_number + {increment} WHERE id = {id} AND vote_number BETWEEN -10 AND 200;')
     cursor.execute(query)
 
+@connection_handler
+def get_message_by_user_id(cursor, table, user_id):
+    cursor.execute(f' SELECT message FROM {table} WHERE users_id = {user_id}')
+    user_message = cursor.fetchall()
+    return user_message
+
 
 @connection_handler
 def insert_into_database(cursor, table, data):
@@ -148,3 +155,5 @@ def identify_user(username):
         result = get_user_id(username)
         user_id = result['id']
     return user_id
+
+

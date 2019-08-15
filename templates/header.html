@@ -41,6 +41,9 @@
         <li>
             <a href="{{ url_for('route_users') }}" class="btn btn-primary">Users</a>
         </li>
+        <li>
+            <a href="{{ url_for('route_user_dashboard', user_id=user_id) }}" class="btn btn-primary">Dashboard</a>
+        </li>
         {% endif %}
         <li class="ask-question">
             <a id="button1" class="btn btn-primary" href="{{ url_for('route_ask_question') }}">Ask Question</a>

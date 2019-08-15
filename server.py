@@ -18,7 +18,9 @@ def index():
     sort = request.args.get('sort')
     direction = request.args.get('direction')
     questions = data_manager.list_questions(sort, direction)
-    return render_template('index.html', questions=questions)
+    username = session['username']
+    user_id = data_manager.identify_user(username)
+    return render_template('index.html', questions=questions, user_id=user_id)
 
 
 @app.route('/question/<question_id>')
@@ -199,6 +201,13 @@ def route_users():
     users = data_manager.get_user_data()
     return render_template('users.html', users=users)
 
+
+@app.route('/user/<user_id>')
+def route_user_dashboard(user_id):
+    questions = data_manager.get_message_by_user_id('question', user_id)
+    answers = data_manager.get_message_by_user_id('answer', user_id)
+    comments = data_manager.get_message_by_user_id('comment', user_id)
+    return render_template('dashboard.html', questions=questions, answers=answers, comments=comments)
 
 if __name__ == '__main__':
     app.run(

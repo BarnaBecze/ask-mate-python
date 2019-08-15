@@ -1,0 +1,75 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+
+Dashboard
+
+{% endblock %}
+
+{% block content %}
+
+<h1>Questions</h1>
+    {% if questions %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            {% for question in questions %}
+            <tbody>
+                <tr>
+                    <td>Title</td>
+                    <td>{{ question['message'] }}</td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+    {% endif %}
+    <br>
+    <br>
+    <br>
+<h1>Answers</h1>
+    {% if answers %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            {% for answer in answers %}
+            <tbody>
+                <tr>
+                    <td>Title</td>
+                    <td>{{ answer['message'] }}</td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+    {% endif %}
+    <br>
+    <br>
+    <br>
+<h1>Comments</h1>
+    {% if comments %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            {% for comment in comments %}
+            <tbody>
+                <tr>
+                    <td>Title</td>
+                    <td>{{ comment['message'] }}</td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+{% endblock %}
