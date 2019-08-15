@@ -34,9 +34,11 @@ def route_questions(question_id):
 def route_ask_question():
     new_question = {}
     if request.method == 'POST':
+        username = session['username']
+        user_id = data_manager.identify_user(username)
         new_question = {
             'id': data_manager.get_next_id('question'),
-            'users_id': None,
+            'users_id': user_id,
             'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             'view_number': '0',
             'vote_number': '0',
@@ -54,9 +56,11 @@ def route_ask_question():
 def route_post_answer(question_id):
     answer = {}
     if request.method == 'POST':
+        username = session['username']
+        user_id = data_manager.identify_user(username)
         answer = {
             'id': data_manager.get_next_id('answer'),
-            'users_id': None,
+            'users_id': user_id,
             'submission_time': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             'vote_number': '0',
             'question_id': question_id,
@@ -73,9 +77,11 @@ def route_add_comment_to_question(question_id):
     comment = {}
 
     if request.method == 'POST':
+        username = session['username']
+        user_id = data_manager.identify_user(username)
         comment = {
             'id': data_manager.get_next_id('comment'),
-            'users_id' : None,
+            'users_id': user_id,
             'question_id': question_id,
             'answer_id': None,
             'message': request.form.get('message'),
@@ -93,9 +99,11 @@ def route_add_comment_to_answer(question_id, answer_id):
     comment = {}
 
     if request.method == 'POST':
+        username = session['username']
+        user_id = data_manager.identify_user(username)
         comment = {
             'id': data_manager.get_next_id('comment'),
-            'users_id': None,
+            'users_id': user_id,
             'question_id': None,
             'answer_id': answer_id,
             'message': request.form.get('message'),

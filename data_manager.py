@@ -89,6 +89,13 @@ def get_user_data(cursor):
 
 
 @connection_handler
+def get_user_id(cursor, username):
+    cursor.execute(f"SELECT id FROM users WHERE username = '{username}'  ")
+    user_id = cursor.fetchone()
+    return user_id
+
+
+@connection_handler
 def update_question_vote(cursor, table, increment, id=None):
     query = sql.SQL(f'UPDATE {table} '
                     f'SET vote_number = vote_number + {increment} WHERE id = {id} AND vote_number BETWEEN -10 AND 200;')
@@ -132,3 +139,12 @@ def search_in_db(cursor, search_phrase):
                     WHERE LOWER(answer.message) LIKE '%{search_phrase}%' OR LOWER(question.message) LIKE '%{search_phrase}%' OR LOWER(question.title) LIKE '%{search_phrase}%';""")
     results = cursor.fetchall()
     return results
+
+
+def identify_user(username):
+    if username == 'invalid' or not username:
+        user_id = None
+    else:
+        result = get_user_id(username)
+        user_id = result['id']
+    return user_id
