@@ -1,6 +1,6 @@
 <header>
         <div class="logo">
-            <h1><a href="/list">AskMate 2.0</a></h1><br>
+            <h1><a href="/list">AskMate 3.0</a></h1><br>
             <h2>Powered by Codecool</h2>
         </div>
 <nav class="navbar navbar-expand-sm">
@@ -42,7 +42,7 @@
             <a href="{{ url_for('route_users') }}" class="btn btn-primary">Users</a>
         </li>
         <li>
-            <a href="{{ url_for('route_user_dashboard', user_id=user_id) }}" class="btn btn-primary">Dashboard</a>
+            <a href="{{ url_for('route_user_dashboard', user_id=session['users_id']) }}" class="btn btn-primary">Dashboard</a>
         </li>
         {% endif %}
         <li class="ask-question">

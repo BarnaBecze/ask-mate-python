@@ -107,3 +107,27 @@ nav {
     position: relative;
     left: 60%;
 }
+/*
+#votenumber, #delete_question{
+    text-align: center;
+}
+*/
+#question_header {
+    margin-top: 10%;
+    background: rgba(232, 232, 232, 0.5);
+}
+
+#message {
+    background: rgba(232, 232, 232, 0.5);
+    justify-content: center;
+}
+
+#comments, #answers {
+    margin-left: 200px;
+    margin-top: 30px;
+    margin-bottom: 25px;
+}
+
+#comments_container {
+    background: rgba(232, 232, 232, 0.5);
+}

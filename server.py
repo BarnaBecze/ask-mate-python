@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import data_manager
 import hash
 from datetime import datetime
-
+from data_manager import get_user_by_id
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
@@ -19,7 +19,10 @@ def index():
     direction = request.args.get('direction')
     questions = data_manager.list_questions(sort, direction)
     username = session['username']
-    user_id = data_manager.identify_user(username)
+    if session['users_id']:
+        user_id = session['users_id']
+    else:
+        user_id = None
     return render_template('index.html', questions=questions, user_id=user_id)
 
 
@@ -28,6 +31,9 @@ def route_questions(question_id):
     question = data_manager.display_question(question_id)
     answers = data_manager.display_answers(question_id)
     comments_for_question = data_manager.display_comments_for_question(question_id)
+    print(question)
+    print(answers)
+    app.jinja_env.filters['get_user'] = get_user_by_id
     # comments_for_answer = data_manager.display_comments_for_answer(answer_id)
     return render_template('display_question.html', question=question, answers=answers, comments_for_question=comments_for_question)
 
@@ -131,11 +137,10 @@ def route_delete_answer(question_id, answer_id):
 
 
 @app.route('/question/<question_id>/vote-up', methods=['GET', 'POST'])
-def route_vote_up(question_id):
+@app.route('/question/<question_id>/<answer_id>/vote-up')
+def route_vote_up(question_id, answer_id=None):
     increment = 1
-    print("up")
-    if request.method == 'POST':
-        answer_id = request.args.get('answer_id')
+    if answer_id:
         data_manager.update_question_vote('answer', increment, id=answer_id)
     else:
         data_manager.update_question_vote('question', increment, id=question_id)
@@ -143,11 +148,10 @@ def route_vote_up(question_id):
 
 
 @app.route('/question/<question_id>/vote-down', methods=['GET', 'POST'])
-def route_vote_down(question_id):
+@app.route('/question/<question_id>/<answer_id>/vote-down')
+def route_vote_down(question_id, answer_id=None):
     increment = -1
-    print("down")
-    if request.method == 'POST':
-        answer_id = request.args.get('answer_id')
+    if answer_id:
         data_manager.update_question_vote('answer', increment, id=answer_id)
     else:
         data_manager.update_question_vote('question', increment, id=question_id)
@@ -185,6 +189,7 @@ def route_login():
         login_info = data_manager.get_user_login_info(username)
         if login_info and hash.verify_password(password, login_info['password']):
             session['username'] = username
+            session['users_id'] = data_manager.identify_user(username)
         else:
             session['username'] = 'invalid'
         return redirect('/list')
@@ -193,6 +198,7 @@ def route_login():
 @app.route('/logout')
 def route_logout():
     session['username'] = None
+    session['users_id'] = None
     return redirect('/list')
 
 
@@ -210,6 +216,7 @@ def route_user_dashboard(user_id):
     return render_template('dashboard.html', questions=questions, answers=answers, comments=comments)
 
 if __name__ == '__main__':
+    app.jinja_env.filters['get_user'] = get_user_by_id
     app.run(
         port=5000,
         debug=True

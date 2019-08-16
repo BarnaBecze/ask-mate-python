@@ -1,106 +1,78 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-    AskMate 2.0
+    AskMate 3.0
 {% endblock %}
 
 {% block content %}
-
-    <h1>{{ question['title'] }}</h1>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Posted</th>
-                    <th>Views</th>
-                    <th>Votes</th>
-                    <th>Message</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ question['submission_time'] }}</td>
-                    <td>{{ question['view_number'] }}</td>
-                    <td><form action="{{ url_for('route_vote_up', question_id=question['id']) }}" method="get">
-                            <button type="button" class="btn btn-primary">Up</button>
-                        </form>
-                        <form action="{{ url_for('route_vote_down', question_id=question['id']) }}" method="get">
-                            <button type="button" class="btn btn-primary">Down</button>
-                        </form>
-                        {{ question['vote_number'] }}
-                    </td>
-                    <td>{{ question['message'] }}
-                    {% if question['image'] %}
-                        <img src="{{ question['image'] }}" alt="img">
+    <div id="question_header" class="container">
+        <div class="row">
+            {% if (question['users_id'] | get_user) %}
+            <div class="col-7"><h2>{{ question['title'] }}</h2><h4>(by {{ question['users_id'] | get_user }})</h4></div>
+            {% else %}
+            <div class="col-7"><h2>{{ question['title'] }}</h2></div>
+            {% endif %}
+        </div>
+        <div class="row">
+            <div class="col-1"><p>Posted</p></div>
+            <div class="col-2"><p>Views</p></div>
+            <div class="col"><a class="btn btn-primary" href="{{ url_for('route_vote_down', question_id=question['id']) }}"><i class="fa fa-arrow-down"></i></a></div>
+            <div id="votenumber" class="col"><h2>{{ question['vote_number'] }}</h2></div>
+            <div class="col"><a class="btn btn-primary" href="{{ url_for('route_vote_up', question_id=question['id']) }}"><i class="fa fa-arrow-up"></i></a></div>
+            <div id="delete_question" class="col-2"><a class="btn btn-primary" href="{{ url_for('route_delete_question', question_id=question['id']) }}">Delete</a></div>
+            <div class="col"><a id="button_comment" class="btn btn-primary" href="{{ url_for('route_add_comment_to_question', question_id=question['id']) }}">Comment</a></div>
+            <div class="col"><a class="btn btn-primary" href="{{ url_for('route_post_answer', question_id=question['id']) }}">Answer</a></div>
+        </div>
+        <div class="row">
+            <div class="col-1"><p>{{ question['submission_time'] }}</p></div>
+            <div class="col-2"><p>{{ question['view_number'] }}</p></div>
+        </div>
+    </div>
+    <div id="message" class="d-flex p-2 bd-highlight">
+        <p>{{ question['message'] }}</p>
+    </div>
+    {% if comments_for_question %}
+        <h2 id="comments">Comments</h2>
+        {% for comment in comments_for_question %}
+            <div id="comments_container" class="container">
+                <div class="row">
+                    {% if (comment['users_id'] | get_user) %}
+                    <div class="col-1"><p>Posted by: {{ comment['users_id'] | get_user }}</p></div>
+                    {% else %}
+                    <div class="col-1"><p>Posted</p></div>
                     {% endif %}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <h3>Comments</h3>
-        {% if comments_for_question %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Posted</th>
-                    <th>Message</th>
-                    <th>Edited</th>
-                </tr>
-            </thead>
-            {% for comment in comments_for_question %}
-            <tbody>
-                <tr>
-                    <td>{{ comment['submission_time'] }}</td>
-                    <td>{{ comment['message'] }}</td>
-                    <td>{{ comment['edited_count'] }}</td>
-                </tr>
-            </tbody>
-            {% endfor %}
-        </table>
+                    <div class="col-1"><p>Edited</p></div>
+                </div>
+                <div class="row">
+                    <div class="col-1">{{ comment['submission_time'] }}</div>
+                    <div class="col-1">{{ comment['edited_count'] }}</div>
+                    <div class="col-5"><p>{{ comment['message'] }}</p></div>
+                </div>
+            </div>
+        {% endfor %}
     {% endif %}
-    <form action="{{ url_for('route_delete_question', question_id=question['id']) }}">
-        <button type="submit">Delete</button>
-        <a id="button1" class="btn btn-primary" href="{{ url_for('route_add_comment_to_question', question_id=question['id']) }}">Add comment</a>
-    </form>
-    <h1>Answers</h1>
     {% if answers %}
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Posted</th>
-                    <th>Votes</th>
-                    <th>Message</th>
-                </tr>
-            </thead>
-            {% for answer in answers %}
-            <tbody>
-                <tr>
-                    <td>{{ answer['submission_time'] }}</td>
-                    <td><form action="{{ url_for('route_vote_up', question_id=question['id'], answer_id=answer['id']) }}" name="answer_id" method="post">
-                            <button type="button" class="btn btn-primary">Up</button>
-                        </form>
-                        <form action="{{ url_for('route_vote_down', question_id=question['id'], answer_id=answer['id']) }}" method="post">
-                            <button type="button" class="btn btn-primary">Down</button>
-                        </form>
-                        {{ answer['vote_number'] }}
-                    </td>
-                    <td>{{ answer['message'], answer['image'] }}</td>
-                    <td>
-                        <a id="button1" class="btn btn-primary" href="{{ url_for('route_add_comment_to_answer', question_id=question['id'], answer_id=answer['id']) }}">Add comment</a>
-                    </td>
-                    <td><form action="{{ url_for('route_delete_answer', answer_id=answer['id'],
-                     question_id=answer['question_id']) }}" >
-                        <button id="delete" class="btn btn-primary" type="submit">Delete answer</button>
-                    </form>
-                    </td>
-                </tr>
-            </tbody>
-            {% endfor %}
-        </table>
-
-    {% elif not answer %}
-    <p>No answers yet!</p>
+        <h2 id="answers">Answers</h2>
+        {% for answer in answers %}
+        <div id="answer" class="container">
+            <div class="row">
+                {% if (answer['users_id'] | get_user) %}
+                <div class="col-5"><p>Posted by: {{ answer['users_id'] | get_user }}</p></div>
+                {% else %}
+                <div class="col-5"><p>Posted</p></div>
+                {% endif %}
+                <div class="col-5"><p>Posted by: {{ answer['users_id'] | get_user }}</p></div>
+                <div class="col"><a class="btn btn-primary" href="{{ url_for('route_vote_down', question_id=question['id'], answer_id=answer['id']) }}"><i class="fa fa-arrow-down"></i></a></div>
+                <div id="votenumber_answer" class="col"><h2>{{ answer['vote_number'] }}</h2></div>
+                <div class="col"><a class="btn btn-primary" href="{{ url_for('route_vote_up', question_id=question['id'], answer_id=answer['id']) }}"><i class="fa fa-arrow-up"></i></a></div>
+                <div id="delete_answer_btn" class="col"><a class="btn btn-primary" href="{{ url_for('route_delete_answer', question_id=question['id'], answer_id=answer['id']) }}">Delete</a></div>
+                <div class="col"><a id="comment_answer" class="btn btn-primary" href="{{ url_for('route_add_comment_to_answer', question_id=question['id'], answer_id=answer['id']) }}">Comment</a></div>
+            </div>
+            <div class="row">
+                <div class="col-2"><p>{{ answer['submission_time'] }}</p></div>
+                <div class="col-9"><p>{{ answer['message'] }}</p></div>
+            </div>
+        </div>
+        {% endfor %}
     {% endif %}
-    <form action="{{ url_for('route_post_answer', question_id=question['id'])}}">
-        <button type="submit" class="btn btn-primary">Post answer</button>
-    </form>
 {% endblock %}

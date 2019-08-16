@@ -2,7 +2,7 @@
 
 {% block title %}
 
-Dashboard
+    AskMate 3.0 | Dashboard
 
 {% endblock %}
 
@@ -20,7 +20,7 @@ Dashboard
             {% for question in questions %}
             <tbody>
                 <tr>
-                    <td>Title</td>
+                    <td><a href="{{ url_for('route_questions', question_id=question['id']) }}">{{ question['title'] }}</a></td>
                     <td>{{ question['message'] }}</td>
                 </tr>
             </tbody>
@@ -42,7 +42,7 @@ Dashboard
             {% for answer in answers %}
             <tbody>
                 <tr>
-                    <td>Title</td>
+                    <td><a href="{{ url_for('route_questions', question_id=answer['question_id']) }}">{{ answer['question_title'] }}</a></td>
                     <td>{{ answer['message'] }}</td>
                 </tr>
             </tbody>
@@ -64,7 +64,7 @@ Dashboard
             {% for comment in comments %}
             <tbody>
                 <tr>
-                    <td>Title</td>
+                    <td><a href="{{ url_for('route_questions', question_id=comment['question_id']) }}">{{ comment['question_title'] }}</a></td>
                     <td>{{ comment['message'] }}</td>
                 </tr>
             </tbody>

@@ -104,7 +104,13 @@ def update_question_vote(cursor, table, increment, id=None):
 
 @connection_handler
 def get_message_by_user_id(cursor, table, user_id):
-    cursor.execute(f' SELECT message FROM {table} WHERE users_id = {user_id}')
+    if table == 'question':
+        cursor.execute(f' SELECT title, message FROM question WHERE users_id = {user_id}')
+    else:
+        cursor.execute(f"""
+                        SELECT question.title AS question_title, question.id AS question_id, {table}.message FROM {table}
+                        JOIN question ON {table}.question_id = question.id
+                        WHERE {table}.users_id = {user_id};""")
     user_message = cursor.fetchall()
     return user_message
 
@@ -156,4 +162,11 @@ def identify_user(username):
         user_id = result['id']
     return user_id
 
+@connection_handler
+def get_user_by_id(cursor, user_id):
+    if not user_id:
+        return None
+    cursor.execute(f"""SELECT * FROM users WHERE id = {user_id};""")
+    user_profile = cursor.fetchone()
+    return user_profile['username']
 
